@@ -16,15 +16,16 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config import (
-    SECRET_KEY, ALLOWED_DOMAIN, DEV_MODE, DEV_USER_EMAIL,
-    BUILD_VERSION, CURRENT_SCHOOL_YEAR,
+    SECRET_KEY, ALLOWED_DOMAINS, DEV_MODE, DEV_USER_EMAIL,
+    BUILD_VERSION, CURRENT_SCHOOL_YEAR, TENANT_ID,
 )
 from auth import (
     init_oauth, oauth, get_current_user, get_real_user, is_impersonating,
     require_auth, require_admin, require_no_impersonation,
     get_accessible_emails, is_admin_title, check_access, is_supervisor,
-    get_user_scope,
+    get_user_scope, is_allowed_email,
 )
+import tenant_loader
 import db
 
 # Ensure the impersonation audit table exists on startup
@@ -311,8 +312,10 @@ def auth_callback():
     userinfo = token.get('userinfo', {})
     email = userinfo.get('email', '').lower()
 
-    if not email.endswith(f'@{ALLOWED_DOMAIN}'):
-        return 'Access restricted to FirstLine Schools staff', 403
+    if not is_allowed_email(email):
+        from tenant_loader import get_tenant_config
+        tname = get_tenant_config().get('name', 'this organization')
+        return f'Access restricted to {tname} staff', 403
 
     # Look up staff record
     try:
@@ -448,13 +451,32 @@ def api_solicit_questions():
 @require_auth
 @require_admin
 def api_permissions():
-    yaml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'permissions.yaml')
+    """Return the merged permissions schema + tenant title mapping.
+
+    The shared capability matrix lives in config/permissions.schema.yaml; the
+    tenant's title-to-tier mapping lives in config/tenants/<id>/titles.yaml.
+    Both are merged here so the admin viewer shows a complete picture.
+    """
     try:
-        with open(yaml_path, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
-        return jsonify(data)
-    except FileNotFoundError:
-        return jsonify({'error': 'permissions.yaml not found'}), 500
+        schema = tenant_loader.get_permissions_schema()
+        titles = tenant_loader.get_titles_config()
+        # Merge: pull title lists from titles.yaml into matching tier blocks
+        title_by_id = {t['id']: t for t in (titles.get('tiers') or [])}
+        merged = dict(schema)
+        merged_tiers = []
+        for tier in (schema.get('tiers') or []):
+            t = dict(tier)
+            extra = title_by_id.get(t.get('id'), {})
+            if extra.get('titles_keyword'):
+                t['titles_keyword'] = extra['titles_keyword']
+            if extra.get('titles_exact'):
+                t['titles_exact'] = extra['titles_exact']
+            merged_tiers.append(t)
+        merged['tiers'] = merged_tiers
+        merged['tenant_id'] = tenant_loader.get_tenant_id()
+        return jsonify(merged)
+    except FileNotFoundError as e:
+        return jsonify({'error': f'Config not found: {e}'}), 500
     except yaml.YAMLError as e:
         return jsonify({'error': f'YAML parse error: {e}'}), 500
 
@@ -4748,12 +4770,39 @@ Write a brief, clear 1-3 sentence answer to the user's question based on these r
 @app.route('/api/forms/<form_id>')
 @require_auth
 def api_get_form(form_id):
+    """Resolve a form/rubric id to JSON.
+
+    Lookup order:
+      1. Tenant rubric by internal id (config/tenants/<id>/rubrics/*.json)
+      2. Tenant config by filename match (commitments, vision, action_steps_guide)
+      3. Generic forms/ directory (legacy fallback for non-tenant forms)
+    """
     safe_id = form_id.replace('..', '').replace('/', '')
-    path = os.path.join(os.path.dirname(__file__), 'forms', f'{safe_id}.json')
-    if not os.path.exists(path):
-        return jsonify({'error': 'Not found'}), 404
-    with open(path) as f:
-        return jsonify(json.load(f))
+
+    # 1. Tenant rubric by id
+    rubric = tenant_loader.get_rubric_by_id(safe_id)
+    if rubric:
+        return jsonify(rubric)
+
+    # 2. Tenant root files (commitments, vision, action_steps_guide)
+    tenant_cfg = tenant_loader.get_tenant_config()
+    candidates = [
+        ('commitments_file', tenant_loader.get_commitments),
+        ('vision_file',      tenant_loader.get_vision),
+        ('action_steps_file', tenant_loader.get_action_steps_guide),
+    ]
+    for cfg_key, getter in candidates:
+        data = getter()
+        if data and data.get('id') == safe_id:
+            return jsonify(data)
+
+    # 3. Legacy forms/ fallback (generic, non-tenant forms still in forms/)
+    legacy_path = os.path.join(os.path.dirname(__file__), 'forms', f'{safe_id}.json')
+    if os.path.exists(legacy_path):
+        with open(legacy_path) as f:
+            return jsonify(json.load(f))
+
+    return jsonify({'error': 'Not found'}), 404
 
 
 # ------------------------------------------------------------------

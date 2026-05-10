@@ -1,0 +1,31 @@
+{
+  "id": "example_commitments_v1",
+  "name": "Example Community Commitments",
+  "description": "Optional: your school's stated values / community commitments. Surfaced in Celebrate flows so leaders can recognize staff in line with values.",
+  "commitments": [
+    {
+      "id": "growth",
+      "number": 1,
+      "theme": "We Keep Growing",
+      "personal": "I commit to my own and others' development.",
+      "collective": "We give and seek feedback to grow together.",
+      "behaviors": [
+        "Seek learning opportunities (PD, observations, books).",
+        "Give honest, kind feedback regularly.",
+        "Acknowledge and learn from mistakes."
+      ]
+    },
+    {
+      "id": "students_first",
+      "number": 2,
+      "theme": "Students First",
+      "personal": "I commit to putting students at the center of every decision.",
+      "collective": "Every choice we make is anchored in what is best for kids.",
+      "behaviors": [
+        "Plan with students in mind, not adult convenience.",
+        "Hold high expectations for every child.",
+        "Build relationships that make students feel seen."
+      ]
+    }
+  ]
+}

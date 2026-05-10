@@ -1,0 +1,40 @@
+# Tenant configuration template
+#
+# Copy this folder to config/tenants/<your-slug>/ and customize.
+# Set TENANT_ID=<your-slug> in the deployment environment.
+
+id: example
+name: Example School Network
+short_name: Example
+support_email: support@example.org
+
+# Email domains that may sign in via Google OAuth.
+# Anyone outside these domains is rejected at login.
+allowed_domains:
+  - example.org
+
+# School year config — used to scope evaluation cycles and reports.
+current_school_year: "2025-2026"
+school_years:
+  - "2024-2025"
+  - "2025-2026"
+
+# Default observation rubrics this tenant uses.
+# Files live in config/tenants/<slug>/rubrics/.
+default_rubrics:
+  teacher: teacher.json
+  leader: leader.json
+  prek: prek.json
+
+# Tenant-specific reference docs (commitments, vision, scoring guides).
+# All optional — leave empty to disable that section in the UI.
+commitments_file: commitments.json
+vision_file: vision.json
+action_steps_file: action_steps_guide.json
+
+# Branding (appears in top-bar / login)
+brand:
+  display_name: "Example School Network"
+  primary_color: "#0f172a"
+  accent_color: "#0891b2"
+  logo_path: ""  # relative to tenant folder, optional

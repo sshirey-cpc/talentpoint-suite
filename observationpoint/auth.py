@@ -1,7 +1,11 @@
 """
 ObservationPoint — Authentication & Authorization
 Google OAuth + email-based org hierarchy.
-Pattern from bigquery-dashboards/auth.py, adapted to use emails instead of names.
+
+Tier classification is delegated to tenant_loader.classify_tier() which
+reads config/tenants/<TENANT_ID>/titles.yaml. The legacy is_cteam /
+is_admin_title / is_content_lead / is_school_leader helpers are now thin
+wrappers that delegate to tenant_loader.
 """
 import os
 import logging
@@ -10,8 +14,12 @@ import psycopg2
 from flask import session, redirect, request, jsonify
 
 from config import (
-    DEV_MODE, CPO_TITLE, C_TEAM_KEYWORDS, HR_TEAM_TITLES,
+    DEV_MODE, ALLOWED_DOMAINS,
     GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
+)
+from tenant_loader import (
+    classify_tier as _classify_tier,
+    get_titles_config,
 )
 
 log = logging.getLogger(__name__)
@@ -30,6 +38,14 @@ def init_oauth(app):
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={'scope': 'openid email profile'},
     )
+
+
+def is_allowed_email(email: str) -> bool:
+    """Check if an email's domain is in the tenant's allowed_domains list."""
+    if not email or '@' not in email:
+        return False
+    domain = email.split('@', 1)[1].lower()
+    return domain in [d.lower() for d in ALLOWED_DOMAINS]
 
 
 def get_current_user():
@@ -108,46 +124,39 @@ def require_no_impersonation(f):
     return decorated
 
 
-# --- Role checks ---
+# ─────────────────────────────────────────────────────────────────────────────
+# Tier classification — delegates to tenant_loader (per-tenant titles.yaml)
+# ─────────────────────────────────────────────────────────────────────────────
 
-def is_cteam(job_title):
-    if not job_title:
-        return False
-    title_lower = job_title.lower()
-    return any(kw.lower() in title_lower for kw in C_TEAM_KEYWORDS)
+def _tier_for(job_title, has_reports=False):
+    """Single source of truth: tenant_loader.classify_tier()."""
+    return _classify_tier(job_title or '', has_direct_reports=has_reports, is_active=True)
 
 
 def is_admin_title(job_title):
-    """CPO, C-Team, or HR Team title."""
-    if not job_title:
-        return False
-    return is_cteam(job_title) or job_title in HR_TEAM_TITLES
+    """True if title maps to admin tier in the active tenant's titles.yaml."""
+    return _tier_for(job_title) == 'admin'
+
+
+def is_cteam(job_title):
+    """Backward-compat: was 'C-team title (Chief / ExDir keyword)'.
+    Now equivalent to is_admin_title since admin tier carries the keyword
+    list. Kept for callers that still import it; prefer is_admin_title."""
+    return is_admin_title(job_title)
+
+
+def is_content_lead(job_title):
+    return _tier_for(job_title) == 'content_lead'
+
+
+def is_school_leader(job_title):
+    return _tier_for(job_title) == 'school_leader'
 
 
 def is_admin_user(user):
     if not user:
         return False
     return user.get('is_admin', False)
-
-
-# --- Tier-based scope (Network + drill-downs) ---
-# Mirrors permissions.yaml. Order MATTERS: content_lead is checked BEFORE
-# admin so ExDir of Teach and Learn (which matches C_TEAM_KEYWORDS via
-# "ExDir") gets the narrower content-lead scope, not full admin.
-
-CONTENT_LEAD_TITLES_EXACT = ['K-8 Content Lead']
-SCHOOL_LEADER_TITLE_KEYWORDS = ['principal', 'assistant principal', 'dean', 'director of culture']
-
-
-def is_content_lead(job_title):
-    return bool(job_title) and job_title.strip() in CONTENT_LEAD_TITLES_EXACT
-
-
-def is_school_leader(job_title):
-    if not job_title:
-        return False
-    title_lower = job_title.lower()
-    return any(kw in title_lower for kw in SCHOOL_LEADER_TITLE_KEYWORDS)
 
 
 def get_user_scope(user):
@@ -160,33 +169,30 @@ def get_user_scope(user):
       {'tier': 'supervisor'}
       {'tier': 'self_only'}
       {'tier': None}  # not authenticated
-
-    Tier order matters — see docstring above.
     """
     if not user:
         return {'tier': None}
     job_title = user.get('job_title') or ''
     school = user.get('school') or ''
+    has_reports = is_supervisor(user)
 
-    if is_content_lead(job_title):
-        return {'tier': 'content_lead'}
-    if is_admin_title(job_title):
-        return {'tier': 'admin'}
-    if is_school_leader(job_title) and school:
+    tier = _classify_tier(job_title, has_direct_reports=has_reports, is_active=True)
+
+    if tier == 'school_leader' and school:
         return {'tier': 'school_leader', 'school': school}
-    if is_supervisor(user):
-        return {'tier': 'supervisor'}
-    return {'tier': 'self_only'}
+    return {'tier': tier}
 
 
-# --- Org hierarchy (email-based recursive CTE) ---
+# ─────────────────────────────────────────────────────────────────────────────
+# Org hierarchy (email-based recursive CTE)
+# ─────────────────────────────────────────────────────────────────────────────
 
 def get_accessible_emails(conn, email, job_title):
     """
     Get all staff emails the user can access. Used by check_access() for
     per-record authorization on staff profiles, action steps, touchpoints.
 
-    Tier behavior (mirrors permissions.yaml):
+    Tier behavior (mirrors permissions.schema.yaml):
       - admin / content_lead: all active staff (Content Leads coach across
         all schools; their PMAP exclusion is enforced at the capability
         layer, not by trimming this list)
@@ -197,8 +203,6 @@ def get_accessible_emails(conn, email, job_title):
       - everyone else: self only
     """
     # All-staff tiers: admin and content_lead.
-    # Order matters — is_content_lead BEFORE is_admin_title so ExDir of
-    # Teach and Learn (which would also match is_cteam) gets here too.
     if is_content_lead(job_title) or is_admin_title(job_title):
         cur = conn.cursor()
         cur.execute("SELECT email FROM staff WHERE is_active")
@@ -228,9 +232,7 @@ def get_accessible_emails(conn, email, job_title):
         for r in cur.fetchall():
             accessible.add(r[0])
 
-    # School leaders: also include all active staff at their school. This
-    # is what makes click-through-from-drill-down to a teacher's profile
-    # actually load data instead of returning 403.
+    # School leaders: also include all active staff at their school.
     if is_school_leader(job_title):
         cur.execute("SELECT school FROM staff WHERE LOWER(email) = LOWER(%s)", (email,))
         row = cur.fetchone()

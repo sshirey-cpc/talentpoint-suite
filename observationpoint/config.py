@@ -1,49 +1,69 @@
 """
-ObservationPoint — Configuration
+ObservationPoint — Process-level Configuration
+
+Holds environment-driven values that DON'T vary per tenant: secrets, DB
+connection, OAuth client credentials. Tenant-specific values (allowed
+email domains, school year, branding, titles) live in
+config/tenants/<TENANT_ID>/ and are loaded by tenant_loader.py.
 """
 import os
 import secrets
 
-# Flask
+from tenant_loader import (
+    get_tenant_id,
+    get_allowed_domains,
+    get_school_year,
+    get_school_years,
+    classify_tier,
+    is_admin_title,
+)
+
+# ── Flask ──────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get('SECRET_KEY', secrets.token_hex(32))
 
-# OAuth
-ALLOWED_DOMAIN = 'firstlineschools.org'
+# ── Tenant ─────────────────────────────────────────────────────────────
+TENANT_ID = get_tenant_id()
+
+# ── OAuth ──────────────────────────────────────────────────────────────
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', '')
 
-# Dev mode
+# Domains that may sign in. Driven by tenant config; first domain is treated
+# as the canonical one (used in dev-mode email defaults, etc.).
+ALLOWED_DOMAINS = get_allowed_domains()
+ALLOWED_DOMAIN = ALLOWED_DOMAINS[0] if ALLOWED_DOMAINS else ''  # backward-compat
+
+# ── Dev mode ───────────────────────────────────────────────────────────
 DEV_MODE = os.environ.get('DEV_MODE', 'false').lower() == 'true'
-DEV_USER_EMAIL = os.environ.get('DEV_USER_EMAIL', 'sshirey@firstlineschools.org')
+DEV_USER_EMAIL = os.environ.get(
+    'DEV_USER_EMAIL',
+    f'dev@{ALLOWED_DOMAIN}' if ALLOWED_DOMAIN else 'dev@example.org',
+)
 
-# Database
-DB_HOST = os.environ.get('DB_HOST') or '35.184.9.224'
-DB_NAME = os.environ.get('DB_NAME') or 'observationpoint'
-DB_USER = os.environ.get('DB_USER') or 'postgres'
-DB_PASS = os.environ.get('DB_PASS') or ''
-DB_PORT = os.environ.get('DB_PORT') or '5432'
-DB_SOCKET = os.environ.get('DB_SOCKET') or ''
+# ── Database ───────────────────────────────────────────────────────────
+DB_HOST = os.environ.get('DB_HOST', '')
+DB_NAME = os.environ.get('DB_NAME') or f'observationpoint_{TENANT_ID.replace("-", "_")}'
+DB_USER = os.environ.get('DB_USER', 'postgres')
+DB_PASS = os.environ.get('DB_PASS', '')
+DB_PORT = os.environ.get('DB_PORT', '5432')
+DB_SOCKET = os.environ.get('DB_SOCKET', '')
 
-# GCP
-PROJECT_ID = os.environ.get('GCP_PROJECT', 'talent-demo-482004')
+# ── GCP ────────────────────────────────────────────────────────────────
+PROJECT_ID = os.environ.get('GCP_PROJECT', '')
 
-# Current school year
-CURRENT_SCHOOL_YEAR = '2025-2026'
-SCHOOL_YEARS = ['2023-2024', '2024-2025', '2025-2026']
+# ── School year (driven by tenant.yaml) ────────────────────────────────
+CURRENT_SCHOOL_YEAR = get_school_year()
+SCHOOL_YEARS = get_school_years()
 
-# Role-based access — same pattern as bigquery-dashboards/config.py
-CPO_TITLE = 'Chief People Officer'
-C_TEAM_KEYWORDS = ['Chief', 'ExDir']
-
-HR_TEAM_TITLES = [
-    'Chief Executive Officer',
-    'Chief HR Officer',
-    'Manager, HR',
-    'Manager Payroll',
-    'Manager - Benefits',
-    'Talent Operations Manager',
-    'Recruitment Manager',
-]
-
-# Build version for cache busting
+# ── Build version for cache busting ────────────────────────────────────
 BUILD_VERSION = os.environ.get('BUILD_VERSION', '1')
+
+# ── Backward-compatibility shims ───────────────────────────────────────
+# auth.py imports CPO_TITLE / C_TEAM_KEYWORDS / HR_TEAM_TITLES. These are
+# being phased out in favor of tenant_loader.classify_tier(). Re-exported
+# here as empty / unused so existing imports don't break during the
+# transition. Code that calls is_cteam() / is_admin_title() should migrate
+# to tenant_loader.classify_tier() / is_admin_title() instead.
+CPO_TITLE = ''  # deprecated; classify_tier handles tier assignment
+C_TEAM_KEYWORDS = []  # deprecated; see tenant titles.yaml
+HR_TEAM_TITLES = []  # deprecated; see tenant titles.yaml

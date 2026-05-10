@@ -1,0 +1,18 @@
+{
+  "id": "example_vision_v1",
+  "name": "Example Vision of Excellent Classrooms",
+  "description": "Optional: your school's articulated vision of strong instruction. Used in Fundamentals timer and observation summaries.",
+  "pillars": [
+    "Students are engaged in the work of the lesson from start to finish",
+    "Students are active members of a joyful classroom community",
+    "Students are working on grade-level content",
+    "Students are demonstrating mastery of the day's content",
+    "Students are doing the majority of the thinking and talking"
+  ],
+  "scoring_guide": {
+    "few": "Less than 50%",
+    "some": "51 - 75%",
+    "most": "76 - 90%",
+    "all": "90 - 100%"
+  }
+}

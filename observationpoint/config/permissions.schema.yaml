@@ -1,13 +1,11 @@
-# ObservationPoint — Permissions Source of Truth
+# ObservationPoint — Permissions Schema (TENANT-NEUTRAL)
+#
+# Defines tiers and capabilities. Title-to-tier mapping is per-tenant —
+# see config/tenants/<slug>/titles.yaml.
 #
 # Edit this file to change role-based access. The /app/admin/permissions
-# viewer reads from here and PERMISSIONS.md is generated from here, so
-# the doc, the UI, and the runtime all stay in sync.
-#
-# Role title source-of-truth lives in `bigquery-dashboards/config.py`.
-# Mirror those exact strings here. NEVER invent new role categories —
-# if a title isn't here AND isn't already in the dashboards config, ask
-# before adding it.
+# viewer reads from here, PERMISSIONS.md is generated from here, and the
+# runtime tier classifier walks here merged with the active tenant's titles.
 #
 # Schema:
 #   tiers:        ordered list of permission buckets, top → bottom = most → least access
@@ -20,41 +18,20 @@ tiers:
     label: Admin
     description: Full access to all schools, all data.
     rule: |
-      job_title matches C_TEAM_KEYWORDS (Chief, ExDir) OR is in HR_TEAM_TITLES
-    titles_keyword: [Chief, ExDir]
-    titles_exact:
-      - Chief Executive Officer
-      - Chief HR Officer
-      - Manager, HR
-      - Manager Payroll
-      - Manager - Benefits
-      - Talent Operations Manager
-      - Recruitment Manager
+      Tenant titles.yaml lists titles_keyword + titles_exact for this tier.
 
   - id: content_lead
     label: Content Lead
     description: |
-      Formative coaching data across all 4 schools — observations, action steps,
+      Formative coaching data across all schools — observations, action steps,
       fundamentals, goals. Explicitly excluded from personnel-review surfaces
       (PMAP, SR, PIP, Write-Up).
-    note: |
-      Only K-8 Content Lead lives here. ExDir of Teach and Learn matches
-      C_TEAM_KEYWORDS via "ExDir" and is full admin (same as CPO/CHRO) —
-      not a content lead. The `teachers_only` scope they get on the Schools
-      dashboard is a dashboard-specific filter, not a tier downgrade.
-    titles_exact:
-      - K-8 Content Lead
 
   - id: school_leader
     label: School Leader
     description: |
       Sees Network-level trends and per-school comparisons. Can only click
       INTO their own school for drill-downs and the school deep-dive page.
-    titles_keyword:  # case-insensitive substring match
-      - principal
-      - assistant principal
-      - dean
-      - director of culture
 
   - id: supervisor
     label: Supervisor
@@ -141,7 +118,7 @@ capabilities:
       - { tier: supervisor,    scope: own_downline }
       - { tier: self_only,     scope: self }
 
-  # ── TouchPoint forms (formative) ──
+  # ── Forms (formative) ──
   - id: form_observe
     label: Observe form
     grants:
@@ -199,9 +176,9 @@ capabilities:
       - { tier: supervisor,    scope: own_downline }
       - { tier: self_only,     scope: self }
 
-  # ── TouchPoint forms (personnel review) ──
+  # ── Forms (personnel review) ──
   - id: form_pmap
-    label: PMAP form
+    label: PMAP / Evaluation form
     grants:
       - { tier: admin,         scope: all_schools }
       - { tier: school_leader, scope: own_school }
@@ -213,8 +190,7 @@ capabilities:
     note: |
       SR is universally self-only — every staff member fills in their own,
       no one fills SR about another person. The form auto-routes to the
-      correct variant (Teacher / Leader / Network / Support / PreK) based
-      on the user's job_function.
+      correct variant based on the user's job_function.
     grants:
       - { tier: admin,         scope: self }
       - { tier: content_lead,  scope: self }

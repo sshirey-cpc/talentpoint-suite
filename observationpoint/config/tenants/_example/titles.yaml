@@ -1,0 +1,41 @@
+# Per-tenant title mapping
+#
+# Maps your organization's job titles to ObservationPoint permission tiers.
+# Tier definitions and capabilities live in config/permissions.schema.yaml
+# (shared, not tenant-editable). Only the titles below are tenant-specific.
+#
+# Matching rules:
+#   - titles_exact: full-string equality, case-sensitive
+#   - titles_keyword: case-insensitive substring match
+#   - First tier matched (top-down) wins.
+#
+# Tiers must be one of: admin, content_lead, school_leader, supervisor, self_only
+
+tiers:
+  - id: admin
+    description: Full access to all schools, all data.
+    titles_keyword: [Chief, Executive Director]
+    titles_exact:
+      - Chief Executive Officer
+      - Chief Academic Officer
+      - Chief Operating Officer
+      - HR Manager
+      - HR Director
+
+  - id: content_lead
+    description: Coaching data network-wide; excluded from personnel review.
+    titles_exact:
+      - Director of Curriculum
+      - Instructional Coach Lead
+
+  - id: school_leader
+    description: Network-trends + own-school drill-downs.
+    titles_keyword:
+      - principal
+      - assistant principal
+      - dean
+      - director of culture
+
+  # supervisor and self_only are rule-based, not title-based.
+  # Anyone with at least one direct report = supervisor.
+  # Everyone else = self_only.

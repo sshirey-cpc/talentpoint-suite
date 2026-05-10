@@ -1,0 +1,35 @@
+# FirstLine Schools — title-to-tier mapping
+#
+# Mirrors the FLS bigquery-dashboards/config.py role definitions so the
+# productized version stays in sync with the FirstLine reference deployment.
+
+tiers:
+  - id: admin
+    description: Full access to all schools, all data.
+    titles_keyword: [Chief, ExDir]
+    titles_exact:
+      - Chief Executive Officer
+      - Chief HR Officer
+      - Manager, HR
+      - Manager Payroll
+      - Manager - Benefits
+      - Talent Operations Manager
+      - Recruitment Manager
+
+  - id: content_lead
+    description: |
+      Formative coaching data across all schools — observations, action steps,
+      fundamentals, goals. Excluded from personnel-review surfaces (PMAP, SR,
+      PIP, Write-Up). At FLS only K-8 Content Lead lives here.
+    titles_exact:
+      - K-8 Content Lead
+
+  - id: school_leader
+    description: Network trends + own-school drill-downs.
+    titles_keyword:
+      - principal
+      - assistant principal
+      - dean
+      - director of culture
+
+  # supervisor and self_only are rule-based, not title-based.

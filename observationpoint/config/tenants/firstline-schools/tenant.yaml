@@ -1,0 +1,28 @@
+id: firstline-schools
+name: FirstLine Schools
+short_name: FirstLine
+support_email: sshirey@firstlineschools.org
+
+allowed_domains:
+  - firstlineschools.org
+
+current_school_year: "2025-2026"
+school_years:
+  - "2023-2024"
+  - "2024-2025"
+  - "2025-2026"
+
+default_rubrics:
+  teacher: teacher.json
+  leader: leader.json
+  prek: prek.json
+
+commitments_file: commitments.json
+vision_file: vision.json
+action_steps_file: action_steps_guide.json
+
+brand:
+  display_name: "FirstLine Schools"
+  primary_color: "#0f172a"
+  accent_color: "#1e7a8c"
+  logo_path: ""
