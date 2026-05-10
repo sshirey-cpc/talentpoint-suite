@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Reflection — ObservationPoint</title>
+<link rel="stylesheet" href="../shared/suite.css">
+<style>
+  :root { --op-accent: #4a6fa5; --op-accent-light: #eef3fa; }
+  .op-page { max-width: 760px; margin: 0 auto; padding: 24px; }
+  .crumbs { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .crumbs a { color: var(--text-secondary); text-decoration: none; }
+  .form-head { margin-bottom: 22px; }
+  .form-meta { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
+
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+  }
+  .who .avatar { width: 44px; height: 44px; font-size: 16px; background: linear-gradient(135deg, var(--op-accent) 0%, #6b8bc4 100%); }
+  .who-name { font-weight: 600; font-size: 15px; }
+  .who-meta { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Quote card with last cycle's notes */
+  .last-cycle {
+    padding: 16px;
+    background: linear-gradient(135deg, var(--op-accent-light) 0%, #f6f9fc 100%);
+    border: 1px solid #d2dfee;
+    border-radius: var(--radius-lg);
+    margin-bottom: 18px;
+  }
+  .last-cycle-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--op-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .last-cycle-quote {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+    font-style: italic;
+  }
+  .last-cycle-attr {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* Question block */
+  .q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--op-accent-light);
+    color: var(--op-accent);
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  .q-prompt {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .q-help {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .q textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.55;
+    resize: vertical;
+    min-height: 100px;
+    background: var(--surface-alt);
+    color: var(--text);
+  }
+  .q textarea:focus {
+    outline: none;
+    border-color: var(--op-accent);
+    background: white;
+    box-shadow: 0 0 0 3px var(--op-accent-light);
+  }
+
+  /* Likert */
+  .likert {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .likert-btn {
+    padding: 12px 6px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition);
+  }
+  .likert-btn:hover { border-color: var(--op-accent); background: var(--op-accent-light); }
+  .likert-btn.selected { border-color: var(--op-accent); background: var(--op-accent); color: white; }
+  .likert-num { font-size: 16px; font-weight: 600; }
+  .likert-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* Footer */
+  .ftr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    position: sticky;
+    bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<header class="suite-topbar">
+  <div class="suite-brand">
+    <div class="suite-brand-logo">TP</div>
+    <div class="suite-brand-name">TalentPoint</div>
+    <div class="suite-brand-divider"></div>
+    <div class="suite-app-switcher">
+      <a class="suite-app-tab pp" href="../peoplepoint/home.html"><span class="dot"></span>PeoplePoint</a>
+      <a class="suite-app-tab op active"><span class="dot"></span>ObservationPoint</a>
+    </div>
+  </div>
+  <div class="suite-topbar-right">
+    <div class="suite-network-name">Horizon Public Schools</div>
+    <div class="suite-user-avatar">ML</div>
+  </div>
+</header>
+
+<div class="op-page">
+  <div class="crumbs">
+    <a href="home.html">Home</a> <span>›</span>
+    <span style="color: var(--text);">Self-reflection · 2025–26 mid-year</span>
+  </div>
+
+  <div class="form-head">
+    <h1 class="t-h1">Mid-year self-reflection</h1>
+    <div class="form-meta">Take 10 minutes. There are no wrong answers — this drives the conversation with Patrick, not a score.</div>
+  </div>
+
+  <!-- Who -->
+  <div class="who">
+    <div class="avatar">ML</div>
+    <div style="flex: 1;">
+      <div class="who-name">Maria Lopez · Math Teacher</div>
+      <div class="who-meta">Filling out for yourself · 2025–26 mid-year cycle</div>
+    </div>
+    <span class="pill pill-blue">Auto-saved</span>
+  </div>
+
+  <!-- Last cycle context -->
+  <div class="last-cycle">
+    <div class="last-cycle-label">Last self-reflection · September 2025</div>
+    <div class="last-cycle-quote">
+      "I want to keep growing on differentiation — I'm strong on whole-class delivery but I lose the kids who need a different entry point. The cold-call deck helped this fall and I want to layer in differentiated openers next."
+    </div>
+    <div class="last-cycle-attr">— You, 8 months ago. Patrick added: "Loved this. Let's do it." (Sep 19, 2025)</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q">
+    <div class="q-prompt"><span class="q-num">1</span>What do you think went well in this cycle?</div>
+    <div class="q-help">Big things, small things, anything you're proud of. Concrete examples help.</div>
+    <textarea placeholder="Start anywhere...">The cold-call exit ticket has been a real shift for me. The data is so much cleaner — I actually know who got it. Patrick's observation in April said "T1 from 3 → 4" and I felt that, the room is more focused. Differentiation in openers is still hit-or-miss but the structure I tried in March is starting to feel natural.</textarea>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q">
+    <div class="q-prompt"><span class="q-num">2</span>Where are you feeling stuck?</div>
+    <div class="q-help">Honest. The ones you don't have a tidy answer to are usually the most useful.</div>
+    <textarea placeholder="The hard ones..."></textarea>
+  </div>
+
+  <!-- Q3 likert -->
+  <div class="q">
+    <div class="q-prompt"><span class="q-num">3</span>How supported do you feel by your school leadership right now?</div>
+    <div class="q-help">Horizon Middle's focus question for the year. We track it through every cycle.</div>
+    <div class="likert">
+      <button class="likert-btn"><div class="likert-num">1</div><div class="likert-label">Not at all</div></button>
+      <button class="likert-btn"><div class="likert-num">2</div><div class="likert-label">A little</div></button>
+      <button class="likert-btn"><div class="likert-num">3</div><div class="likert-label">Mostly</div></button>
+      <button class="likert-btn selected"><div class="likert-num">4</div><div class="likert-label">A lot</div></button>
+      <button class="likert-btn"><div class="likert-num">5</div><div class="likert-label">Strongly</div></button>
+    </div>
+    <textarea placeholder="Why? (optional)">Patrick has been steady. The April observation was the most useful one I've had. The thing I'd love more of is co-observation — Devon and I did one in February and I learned more in 30 minutes than in a typical PD day.</textarea>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q">
+    <div class="q-prompt"><span class="q-num">4</span>What's one thing you'd commit to for the rest of the year?</div>
+    <div class="q-help">Drives next cycle's action step. Concrete, doable in 60 days.</div>
+    <textarea placeholder="One thing..."></textarea>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q">
+    <div class="q-prompt"><span class="q-num">5</span>Anything else you want Patrick to know?</div>
+    <div class="q-help">Wide open. Personal stuff is fair game — we're all human.</div>
+    <textarea placeholder="Optional..."></textarea>
+  </div>
+
+  <!-- Footer -->
+  <div class="ftr">
+    <div style="font-size: 13px; color: var(--text-secondary);">Auto-saved 32 seconds ago</div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-ghost">Save & finish later</button>
+      <button class="btn btn-primary" style="background: var(--op-accent); border-color: var(--op-accent);">Submit to Patrick</button>
+    </div>
+  </div>
+
+  <div class="suite-footer">
+    <span>ObservationPoint · Self-Reflection</span>
+    <span>Visible only to Maria and Patrick · drives mid-year cycle close</span>
+  </div>
+</div>
+
+</body>
+</html>

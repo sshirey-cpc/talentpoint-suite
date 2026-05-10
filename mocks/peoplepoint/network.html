@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network — PeoplePoint</title>
+<link rel="stylesheet" href="../shared/suite.css">
+<style>
+  .pp-page { max-width: 1380px; margin: 0 auto; padding: 24px; }
+  .crumbs { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .crumbs a { color: var(--text-secondary); text-decoration: none; }
+
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+  .sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+
+  /* Network stats */
+  .net-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 800px) { .net-stats { grid-template-columns: 1fr 1fr; } }
+  .net-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+  }
+  .net-stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+  .net-stat-num { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; margin-top: 4px; }
+  .net-stat-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .net-stat-trend { color: var(--green); }
+  .net-stat-trend.down { color: var(--red); }
+
+  /* School cards */
+  .schools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1100px) { .schools { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .schools { grid-template-columns: 1fr; } }
+
+  .school {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+    color: inherit;
+  }
+  .school:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+  .school-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .school-name { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; }
+  .school-meta { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .school-leader { font-size: 12px; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+
+  .school-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+  .school-row:last-child { border-bottom: none; }
+  .school-row-label { color: var(--text-secondary); }
+  .school-row-val { font-weight: 500; }
+
+  .school-bar {
+    height: 4px;
+    background: var(--surface-sunk);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .school-bar-fill { height: 100%; background: var(--accent); }
+
+  .school-status {
+    margin-top: 16px;
+    padding: 10px 12px;
+    background: var(--surface-alt);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<header class="suite-topbar">
+  <div class="suite-brand">
+    <div class="suite-brand-logo">TP</div>
+    <div class="suite-brand-name">TalentPoint</div>
+    <div class="suite-brand-divider"></div>
+    <div class="suite-app-switcher">
+      <a class="suite-app-tab pp active"><span class="dot"></span>PeoplePoint</a>
+      <a class="suite-app-tab op" href="../observationpoint/home.html"><span class="dot"></span>ObservationPoint</a>
+    </div>
+  </div>
+  <div class="suite-topbar-right">
+    <div class="suite-network-name">Horizon Public Schools</div>
+    <div class="suite-user-avatar">SC</div>
+  </div>
+</header>
+
+<div class="pp-page">
+  <div class="crumbs"><a href="home.html">Today</a> <span>›</span> <span style="color: var(--text);">Network</span></div>
+
+  <div class="head">
+    <div>
+      <h1 class="t-display">Horizon Public Schools — Network</h1>
+      <p class="sub">3 schools · 96 staff · network-wide trends</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-secondary">View as ↓</button>
+      <button class="btn btn-secondary">Export</button>
+    </div>
+  </div>
+
+  <!-- Network stats -->
+  <div class="net-stats">
+    <div class="net-stat">
+      <div class="net-stat-label">Filled</div>
+      <div class="net-stat-num">94 / 96</div>
+      <div class="net-stat-meta"><span class="net-stat-trend">↑ 2 from January</span></div>
+    </div>
+    <div class="net-stat">
+      <div class="net-stat-label">Connected this month</div>
+      <div class="net-stat-num">86%</div>
+      <div class="net-stat-meta"><span class="net-stat-trend">↑ 4 pts vs last term</span></div>
+    </div>
+    <div class="net-stat">
+      <div class="net-stat-label">ITR · returning</div>
+      <div class="net-stat-num">71%</div>
+      <div class="net-stat-meta">9 undecided · 4 not returning</div>
+    </div>
+    <div class="net-stat">
+      <div class="net-stat-label">Mid-year evals done</div>
+      <div class="net-stat-num">61 / 94</div>
+      <div class="net-stat-meta">65% complete · finish by May 30</div>
+    </div>
+  </div>
+
+  <!-- Schools grid -->
+  <div class="schools">
+    <a class="school" href="school.html">
+      <div class="school-head">
+        <div>
+          <div class="school-name">Horizon Middle Academy</div>
+          <div class="school-meta">Grades 5–8 · 412 students</div>
+        </div>
+        <span class="pill pill-green">All filled</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Staff</span>
+        <span class="school-row-val">38 of 38</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Connected this month</span>
+        <span class="school-row-val">92%</span>
+      </div>
+      <div class="school-bar"><div class="school-bar-fill" style="width: 92%;"></div></div>
+      <div class="school-row">
+        <span class="school-row-label">ITR returning</span>
+        <span class="school-row-val">76%</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Mid-year done</span>
+        <span class="school-row-val">28 / 38</span>
+      </div>
+      <div class="school-leader">
+        <div class="avatar avatar-sm">PC</div>
+        <span>Patrick Collins, Principal</span>
+      </div>
+      <div class="school-status">Steady. Mid-year evals on track. Two stay conversations remaining for ITR-undecided.</div>
+    </a>
+
+    <a class="school" href="school.html">
+      <div class="school-head">
+        <div>
+          <div class="school-name">Cedar Grove Elementary</div>
+          <div class="school-meta">Grades K–4 · 388 students</div>
+        </div>
+        <span class="pill pill-amber">2 open</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Staff</span>
+        <span class="school-row-val">30 of 32</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Connected this month</span>
+        <span class="school-row-val">81%</span>
+      </div>
+      <div class="school-bar"><div class="school-bar-fill" style="width: 81%; background: var(--amber);"></div></div>
+      <div class="school-row">
+        <span class="school-row-label">ITR returning</span>
+        <span class="school-row-val">66%</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Mid-year done</span>
+        <span class="school-row-val">19 / 30</span>
+      </div>
+      <div class="school-leader">
+        <div class="avatar avatar-sm">RH</div>
+        <span>Rosa Hernandez, Principal</span>
+      </div>
+      <div class="school-status">Two open positions in K and Grade 3. ITR a bit lower than network — Rosa is running a stay-conversation push this week.</div>
+    </a>
+
+    <a class="school" href="school.html">
+      <div class="school-head">
+        <div>
+          <div class="school-name">Pinecrest PreK Center</div>
+          <div class="school-meta">PreK · 184 students</div>
+        </div>
+        <span class="pill pill-green">All filled</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Staff</span>
+        <span class="school-row-val">26 of 26</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Connected this month</span>
+        <span class="school-row-val">88%</span>
+      </div>
+      <div class="school-bar"><div class="school-bar-fill" style="width: 88%;"></div></div>
+      <div class="school-row">
+        <span class="school-row-label">ITR returning</span>
+        <span class="school-row-val">73%</span>
+      </div>
+      <div class="school-row">
+        <span class="school-row-label">Mid-year done</span>
+        <span class="school-row-val">14 / 26</span>
+      </div>
+      <div class="school-leader">
+        <div class="avatar avatar-sm">TJ</div>
+        <span>Tomás Junco, Director</span>
+      </div>
+      <div class="school-status">Strong stay rates. Mid-year evals will accelerate next two weeks. Andrea Bloom (new hire) hits 90 days today.</div>
+    </a>
+  </div>
+
+  <div class="suite-footer">
+    <span>PeoplePoint Network · auto-scoped to your supervisor chain</span>
+    <span>Sasha Chen · COO · 3 schools below</span>
+  </div>
+</div>
+
+</body>
+</html>
