@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalentPoint Suite — Design System</title>
+<link rel="stylesheet" href="../shared/suite.css">
+<style>
+  .ds-section { margin: 32px 0; }
+  .ds-title { margin-bottom: 12px; }
+  .ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .swatch { padding: 16px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .swatch-bar { height: 36px; border-radius: 6px; border: 1px solid var(--border); }
+  .swatch-name { font-weight: 500; font-size: 13px; }
+  .swatch-val { font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+  .type-row { padding: 14px 0; border-bottom: 1px solid var(--border-light); }
+  .type-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-family: ui-monospace, monospace; }
+  .demo-card { padding: 24px; }
+  .demo-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .demo-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .demo-field-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="suite-topbar">
+  <div class="suite-brand">
+    <div class="suite-brand-logo">TP</div>
+    <div class="suite-brand-name">TalentPoint</div>
+    <div class="suite-brand-divider"></div>
+    <div class="suite-app-switcher">
+      <button class="suite-app-tab pp"><span class="dot"></span>PeoplePoint</button>
+      <button class="suite-app-tab op"><span class="dot"></span>ObservationPoint</button>
+    </div>
+  </div>
+  <div class="suite-topbar-right">
+    <div class="suite-network-name">Design System</div>
+    <div class="suite-user-avatar">SS</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="ds-section">
+    <h1 class="t-display">TalentPoint Suite — Design System</h1>
+    <p class="t-body secondary" style="margin-top: 6px; max-width: 640px;">
+      The shared visual language for PeoplePoint and ObservationPoint. Calm, quiet, sidekick-not-coach.
+      Color used sparingly — numbers and names speak for themselves.
+    </p>
+  </div>
+
+  <!-- ── Brand stack ── -->
+  <div class="ds-section">
+    <h2 class="t-h1 ds-title">Brand stack</h2>
+    <div class="card" style="background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-deep-2) 100%); color: white; padding: 32px;">
+      <div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px;">A product of</div>
+      <div style="font-size: 16px; font-weight: 500; margin-bottom: 24px;">Confluence Point Consulting</div>
+      <div style="font-size: 32px; font-weight: 600; letter-spacing: -0.02em;">TalentPoint</div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 4px; max-width: 380px;">The platform. The confluence of people, observations, retention, and recruiting — calm and clear.</div>
+      <div style="margin-top: 28px; display: flex; gap: 24px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--pp-tint);"></span>
+            <span style="font-weight: 500;">PeoplePoint</span>
+          </div>
+          <div class="t-tiny" style="color: rgba(255,255,255,0.5); margin-top: 4px;">See your people</div>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #6b8bc4;"></span>
+            <span style="font-weight: 500;">ObservationPoint</span>
+          </div>
+          <div class="t-tiny" style="color: rgba(255,255,255,0.5); margin-top: 4px;">Observe and develop</div>
+        </div>
+        <div style="opacity: 0.4;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #b08a3b;"></span>
+            <span style="font-weight: 500;">RetentionPoint</span>
+          </div>
+          <div class="t-tiny" style="color: rgba(255,255,255,0.5); margin-top: 4px;">Future</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Color ── -->
+  <div class="ds-section">
+    <h2 class="t-h1 ds-title">Color</h2>
+    <p class="t-body secondary" style="margin-bottom: 16px;">Brand uses calm, water-toned anchors. Status colors are deliberately muted — we surface needs gently, not in red.</p>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Brand</h3>
+    <div class="ds-grid">
+      <div class="swatch"><div class="swatch-bar" style="background: var(--brand-deep);"></div><span class="swatch-name">brand-deep</span><span class="swatch-val">#1b2332</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--accent);"></div><span class="swatch-name">accent (teal)</span><span class="swatch-val">#0d9488</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--accent-light);"></div><span class="swatch-name">accent-light</span><span class="swatch-val">#e6f7f5</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--pp-tint);"></div><span class="swatch-name">PeoplePoint tint</span><span class="swatch-val">#0d9488</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--op-tint);"></div><span class="swatch-name">ObservationPoint tint</span><span class="swatch-val">#4a6fa5</span></div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 24px 0 8px;">Surfaces</h3>
+    <div class="ds-grid">
+      <div class="swatch"><div class="swatch-bar" style="background: var(--bg);"></div><span class="swatch-name">bg</span><span class="swatch-val">#f0f2f5</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--surface);"></div><span class="swatch-name">surface</span><span class="swatch-val">#ffffff</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--surface-alt);"></div><span class="swatch-name">surface-alt</span><span class="swatch-val">#f5f6f8</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--border); border-color: var(--border-strong);"></div><span class="swatch-name">border</span><span class="swatch-val">#e0e3e8</span></div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 24px 0 8px;">Status (used sparingly)</h3>
+    <div class="ds-grid">
+      <div class="swatch"><div class="swatch-bar" style="background: var(--green);"></div><span class="swatch-name">green</span><span class="swatch-val">#10b981</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--amber);"></div><span class="swatch-name">amber</span><span class="swatch-val">#d97706</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--red);"></div><span class="swatch-name">red (rare)</span><span class="swatch-val">#b91c1c</span></div>
+      <div class="swatch"><div class="swatch-bar" style="background: var(--blue);"></div><span class="swatch-name">blue</span><span class="swatch-val">#3b82f6</span></div>
+    </div>
+  </div>
+
+  <!-- ── Typography ── -->
+  <div class="ds-section">
+    <h2 class="t-h1 ds-title">Typography</h2>
+    <div class="card" style="padding: 24px;">
+      <div class="type-row"><span class="t-display">Display — page titles</span><div class="type-meta">28px / 600 / -0.01em</div></div>
+      <div class="type-row"><span class="t-h1">H1 — section headers</span><div class="type-meta">22px / 600</div></div>
+      <div class="type-row"><span class="t-h2">H2 — card headers</span><div class="type-meta">18px / 600</div></div>
+      <div class="type-row"><span class="t-h3">H3 — list groupings</span><div class="type-meta">15px / 600</div></div>
+      <div class="type-row"><span class="t-body">Body — default running text. Maria's last connection was four weeks ago.</span><div class="type-meta">14px / 400</div></div>
+      <div class="type-row"><span class="t-small">Small — secondary metadata, labels under data</span><div class="type-meta">13px / 400 / secondary</div></div>
+      <div class="type-row"><span class="t-tiny">Tiny — timestamps, captions</span><div class="type-meta">12px / 400 / muted</div></div>
+    </div>
+  </div>
+
+  <!-- ── Components ── -->
+  <div class="ds-section">
+    <h2 class="t-h1 ds-title">Components</h2>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Buttons</h3>
+    <div class="card demo-card">
+      <div class="demo-row">
+        <button class="btn btn-primary">Schedule observation</button>
+        <button class="btn btn-secondary">View profile</button>
+        <button class="btn btn-ghost">Cancel</button>
+      </div>
+      <div class="demo-row">
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-primary">Default</button>
+        <button class="btn btn-primary btn-lg">Large action</button>
+      </div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Pills</h3>
+    <div class="card demo-card">
+      <div class="demo-row">
+        <span class="pill">Default</span>
+        <span class="pill pill-accent">Active cycle</span>
+        <span class="pill pill-green">Filled</span>
+        <span class="pill pill-amber">Open position</span>
+        <span class="pill pill-red">Action needed</span>
+        <span class="pill pill-blue">3 years</span>
+        <span class="pill pill-purple">PreK</span>
+      </div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Form fields</h3>
+    <div class="card demo-card">
+      <div class="demo-field-grid">
+        <div class="field">
+          <label class="field-label">Person</label>
+          <input class="input" value="Maria Lopez">
+        </div>
+        <div class="field">
+          <label class="field-label">School</label>
+          <select class="select"><option>Horizon Middle Academy</option><option>Cedar Grove Elementary</option></select>
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label class="field-label">Notes</label>
+          <textarea class="textarea" placeholder="Quick reflection on what you saw...">Maria did a clean job on student think-time today — the math discussion was led almost entirely by students.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Person row</h3>
+    <div class="card demo-card">
+      <div class="person-row" style="margin-bottom: 14px;">
+        <div class="avatar">ML</div>
+        <div>
+          <div class="person-name">Maria Lopez</div>
+          <div class="person-meta">Math Teacher · Horizon Middle Academy · 1.7 years</div>
+        </div>
+      </div>
+      <div class="person-row">
+        <div class="avatar avatar-sm">PC</div>
+        <div>
+          <div class="person-name" style="font-size: 13px;">Patrick Collins</div>
+          <div class="person-meta">Principal · Horizon Middle Academy</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="t-h3" style="margin: 16px 0 8px;">Card section</h3>
+    <div class="card-section" style="max-width: 520px;">
+      <div class="card-section-header">
+        <span class="t-h3">Last connection</span>
+        <span class="pill pill-accent">4 weeks ago</span>
+      </div>
+      <div class="card-section-body">
+        <div class="t-body">Patrick Collins observed a 7th grade math lesson on Tuesday, April 22.</div>
+        <div class="t-tiny" style="margin-top: 6px;">Logged in ObservationPoint · 28 minutes</div>
+        <div style="margin-top: 14px; display: flex; gap: 8px;">
+          <button class="btn btn-primary btn-sm">Schedule next</button>
+          <button class="btn btn-ghost btn-sm">View history</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Voice ── -->
+  <div class="ds-section">
+    <h2 class="t-h1 ds-title">Voice</h2>
+    <div class="card" style="padding: 24px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+          <div class="t-h3" style="color: var(--green); margin-bottom: 8px;">Sidekick — what we say</div>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li class="t-body">Maria hasn't responded to ITR yet.</li>
+            <li class="t-body">Last connection: 4 weeks ago.</li>
+            <li class="t-body">7 of 9 teachers have submitted self-reflection.</li>
+            <li class="t-body">Birthday: Maria Lopez — Friday.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="t-h3" style="color: var(--red); margin-bottom: 8px;">Coach — what we don't say</div>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li class="t-body muted">⚠️ HIGH RISK — IMMEDIATE ACTION REQUIRED</li>
+            <li class="t-body muted">🚨 OVERDUE: Schedule a stay conversation now</li>
+            <li class="t-body muted">22% AT-RISK STAFF — 14 OPEN ITEMS</li>
+            <li class="t-body muted">You should be celebrating birthdays.</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-light); font-size: 13px; color: var(--text-secondary);">
+        <strong>Why:</strong> School leaders are bombarded with alerts that scream "urgent" until everything tunes out. TalentPoint shows the data calmly and lets the leader decide. People are smart. Give them data, not judgment.
+      </div>
+    </div>
+  </div>
+
+  <div class="suite-footer">
+    <span>TalentPoint Suite Design System · v0.1</span>
+    <span>Confluence Point Consulting · 2026</span>
+  </div>
+</div>
+
+</body>
+</html>

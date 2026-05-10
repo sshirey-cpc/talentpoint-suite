@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeoplePoint — Today</title>
+<link rel="stylesheet" href="../shared/suite.css">
+<style>
+  .pp-page { max-width: 1280px; margin: 0 auto; padding: 24px; }
+  .pp-greeting { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 6px; }
+  .pp-sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+  .pp-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 1000px) { .pp-grid { grid-template-columns: 1fr; } }
+
+  /* Stat card */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 800px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+  }
+  .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; }
+  .stat-num { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; margin-top: 4px; color: var(--text); }
+  .stat-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Surface block */
+  .surface {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .surface-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .surface-head .left { display: flex; align-items: center; gap: 10px; }
+  .surface-title { font-weight: 600; font-size: 15px; }
+  .surface-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 1px 8px;
+    background: var(--surface-alt);
+    border-radius: 12px;
+  }
+  .surface-body { padding: 0; }
+
+  /* Today's notable list */
+  .notable-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .notable-row:hover { background: var(--surface-alt); }
+  .notable-row:last-child { border-bottom: none; }
+  .notable-line { font-size: 14px; }
+  .notable-line strong { font-weight: 600; }
+  .notable-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Inline action button */
+  .ax {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .ax:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .ax-strong { background: var(--accent); color: white; border-color: var(--accent); }
+  .ax-strong:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: white; }
+
+  /* Calendar / season strip */
+  .season-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--accent-light) 0%, #f0f7f5 100%);
+    border: 1px solid #b3e6df;
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+  }
+  .season-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .season-text { flex: 1; }
+  .season-title { font-weight: 600; font-size: 14px; color: var(--accent-strong); }
+  .season-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .season-dates { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+
+  /* Side rail */
+  .rail-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .rail-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .rail-bday {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .rail-bday:last-child { border-bottom: none; }
+  .rail-bday-when {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    text-align: right;
+    width: 56px;
+  }
+  .focus-q {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 12px;
+  }
+  .focus-trend {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .focus-trend-cell {
+    text-align: center;
+    padding: 10px 6px;
+    border-radius: 6px;
+    background: var(--surface-alt);
+  }
+  .focus-trend-num { font-size: 18px; font-weight: 600; color: var(--accent); }
+  .focus-trend-when { font-size: 10px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<header class="suite-topbar">
+  <div class="suite-brand">
+    <div class="suite-brand-logo">TP</div>
+    <div class="suite-brand-name">TalentPoint</div>
+    <div class="suite-brand-divider"></div>
+    <div class="suite-app-switcher">
+      <a class="suite-app-tab pp active"><span class="dot"></span>PeoplePoint</a>
+      <a class="suite-app-tab op" href="../observationpoint/home.html"><span class="dot"></span>ObservationPoint</a>
+    </div>
+  </div>
+  <div class="suite-topbar-right">
+    <div class="suite-network-name">Horizon Public Schools</div>
+    <div class="suite-season">Mid-year · Stay Conversations</div>
+    <div class="suite-user-avatar">SC</div>
+  </div>
+</header>
+
+<div class="pp-page">
+  <div class="pp-greeting">
+    <div>
+      <h1 class="t-display">Good morning, Sasha.</h1>
+      <p class="pp-sub">Friday, May 9 — six teachers under you, three things worth noticing.</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-secondary">View as ↓</button>
+      <button class="btn btn-primary">Log a connection</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-label">Filled positions</div>
+      <div class="stat-num">94 <span style="font-size: 16px; color: var(--text-muted); font-weight: 400;">/ 96</span></div>
+      <div class="stat-meta">2 open · 1 in offer</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Connected this month</div>
+      <div class="stat-num">86%</div>
+      <div class="stat-meta">82 of 96 staff</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">ITR returned</div>
+      <div class="stat-num">71%</div>
+      <div class="stat-meta">68 yes · 4 no · 9 undecided</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Active eval cycles</div>
+      <div class="stat-num">94</div>
+      <div class="stat-meta">61 mid-year complete</div>
+    </div>
+  </div>
+
+  <!-- Season strip -->
+  <div class="season-strip">
+    <div class="season-icon">🌊</div>
+    <div class="season-text">
+      <div class="season-title">Stay Conversations season is open</div>
+      <div class="season-desc">ITR results are in. 9 undecided + 4 not-completed staff need a stay conversation before May 30.</div>
+    </div>
+    <div class="season-dates">May 1 → May 30</div>
+  </div>
+
+  <div class="pp-grid">
+    <div>
+      <!-- Today's notable -->
+      <div class="surface">
+        <div class="surface-head">
+          <div class="left">
+            <span class="surface-title">Today, worth noticing</span>
+            <span class="surface-count">3</span>
+          </div>
+          <button class="btn btn-ghost btn-sm">All people →</button>
+        </div>
+        <div class="surface-body">
+          <div class="notable-row">
+            <div class="avatar">ML</div>
+            <div>
+              <div class="notable-line"><strong>Maria Lopez</strong> hasn't responded to ITR yet.</div>
+              <div class="notable-meta">Math, Horizon Middle · last connected 4 weeks ago · she's been thoughtful in past conversations</div>
+            </div>
+            <button class="ax ax-strong">Schedule coffee</button>
+          </div>
+          <div class="notable-row">
+            <div class="avatar">JT</div>
+            <div>
+              <div class="notable-line"><strong>James Tate</strong> said undecided on ITR.</div>
+              <div class="notable-meta">5th grade, Cedar Grove · 3 years tenured · responded May 6</div>
+            </div>
+            <button class="ax">Stay conversation</button>
+          </div>
+          <div class="notable-row">
+            <div class="avatar">AB</div>
+            <div>
+              <div class="notable-line"><strong>Andrea Bloom</strong>'s 30/60/90 lands today.</div>
+              <div class="notable-meta">PreK, Pinecrest · onboarded Feb 9 · last formal check-in: April 9</div>
+            </div>
+            <button class="ax">Open touchpoint</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Longest since connected -->
+      <div class="surface">
+        <div class="surface-head">
+          <div class="left">
+            <span class="surface-title">Longest since you connected</span>
+            <span class="surface-count">5 over 4 weeks</span>
+          </div>
+          <button class="btn btn-ghost btn-sm">All →</button>
+        </div>
+        <div class="surface-body">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Person</th>
+                <th>School</th>
+                <th>Last connection</th>
+                <th>Tenure</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="person-row">
+                    <div class="avatar avatar-sm">RC</div>
+                    <span class="person-name">Renee Castro</span>
+                  </div>
+                </td>
+                <td><span class="t-small">Horizon Middle</span></td>
+                <td><span class="pill pill-amber">7 weeks</span></td>
+                <td><span class="t-small">4.2 yrs</span></td>
+                <td><button class="ax">Schedule</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="person-row">
+                    <div class="avatar avatar-sm">DK</div>
+                    <span class="person-name">Devon King</span>
+                  </div>
+                </td>
+                <td><span class="t-small">Cedar Grove</span></td>
+                <td><span class="pill pill-amber">6 weeks</span></td>
+                <td><span class="t-small">2.1 yrs</span></td>
+                <td><button class="ax">Schedule</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="person-row">
+                    <div class="avatar avatar-sm">EP</div>
+                    <span class="person-name">Elena Park</span>
+                  </div>
+                </td>
+                <td><span class="t-small">Pinecrest</span></td>
+                <td><span class="pill pill-amber">5 weeks</span></td>
+                <td><span class="t-small">7 mo</span></td>
+                <td><button class="ax">Schedule</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right rail -->
+    <div>
+      <div class="rail-card">
+        <div class="rail-title">Birthdays this week</div>
+        <div class="rail-bday">
+          <div class="avatar avatar-sm">ML</div>
+          <div style="flex: 1;">
+            <div class="t-small" style="color: var(--text); font-weight: 500;">Maria Lopez</div>
+            <div class="t-tiny">Math · Horizon Middle</div>
+          </div>
+          <div class="rail-bday-when">Today</div>
+        </div>
+        <div class="rail-bday">
+          <div class="avatar avatar-sm">DK</div>
+          <div style="flex: 1;">
+            <div class="t-small" style="color: var(--text); font-weight: 500;">Devon King</div>
+            <div class="t-tiny">5th grade · Cedar Grove</div>
+          </div>
+          <div class="rail-bday-when">Sun</div>
+        </div>
+        <div class="rail-bday">
+          <div class="avatar avatar-sm">PA</div>
+          <div style="flex: 1;">
+            <div class="t-small" style="color: var(--text); font-weight: 500;">Priya Anand</div>
+            <div class="t-tiny">Counselor · Pinecrest</div>
+          </div>
+          <div class="rail-bday-when">Wed</div>
+        </div>
+      </div>
+
+      <div class="rail-card">
+        <div class="rail-title">Your focus question</div>
+        <div class="focus-q">"Do you feel supported by your school leadership?"</div>
+        <div class="t-tiny">Trended across the year</div>
+        <div class="focus-trend">
+          <div class="focus-trend-cell">
+            <div class="focus-trend-num">78%</div>
+            <div class="focus-trend-when">Oct pulse</div>
+          </div>
+          <div class="focus-trend-cell" style="background: var(--accent-light);">
+            <div class="focus-trend-num">71%</div>
+            <div class="focus-trend-when">Jan ITR</div>
+          </div>
+          <div class="focus-trend-cell">
+            <div class="focus-trend-num" style="color: var(--text-muted);">—</div>
+            <div class="focus-trend-when">May mini</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-card">
+        <div class="rail-title">Network at a glance</div>
+        <div class="t-small" style="margin-bottom: 10px;">3 schools under you</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <a class="between" style="padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; text-decoration: none; color: inherit;">
+            <span class="t-small" style="color: var(--text); font-weight: 500;">Horizon Middle Academy</span>
+            <span class="t-tiny">38 staff</span>
+          </a>
+          <a class="between" style="padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; text-decoration: none; color: inherit;">
+            <span class="t-small" style="color: var(--text); font-weight: 500;">Cedar Grove Elementary</span>
+            <span class="t-tiny">32 staff</span>
+          </a>
+          <a class="between" style="padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; text-decoration: none; color: inherit;">
+            <span class="t-small" style="color: var(--text); font-weight: 500;">Pinecrest PreK Center</span>
+            <span class="t-tiny">26 staff</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="suite-footer">
+    <span>PeoplePoint · part of TalentPoint Suite by Confluence Point</span>
+    <span>Hierarchy auto-scoped from your supervisor chain</span>
+  </div>
+</div>
+
+</body>
+</html>
