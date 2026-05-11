@@ -7,133 +7,81 @@
 <link rel="stylesheet" href="../shared/suite.css">
 <style>
   :root { --op-accent: #4a6fa5; --op-accent-light: #eef3fa; }
-  .op-page { max-width: 1180px; margin: 0 auto; padding: 24px; }
-  .op-greeting { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 12px; }
-  .op-sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+  .op-page { max-width: 980px; margin: 0 auto; padding: 24px; }
+  .crumbs { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .crumbs a { color: var(--text-secondary); text-decoration: none; }
 
-  /* Action tiles */
-  .actions {
+  .op-head { margin-bottom: 22px; }
+  .op-head h1 { letter-spacing: -0.01em; }
+  .op-head .sub { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
+
+  /* Tile grid — main act */
+  .tiles {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-bottom: 24px;
   }
-  @media (max-width: 800px) { .actions { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 500px) { .actions { grid-template-columns: 1fr; } }
-  .action-tile {
+  @media (max-width: 800px) { .tiles { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .tiles { grid-template-columns: 1fr; } }
+
+  .tile {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 16px;
+    padding: 18px;
     cursor: pointer;
     text-decoration: none;
     color: inherit;
     transition: all var(--transition);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    min-height: 130px;
   }
-  .action-tile:hover {
+  .tile:hover {
     border-color: var(--op-accent);
     background: var(--op-accent-light);
+    transform: translateY(-1px);
   }
-  .action-tile.primary {
-    background: linear-gradient(135deg, var(--op-accent) 0%, #6b8bc4 100%);
-    color: white;
-    border-color: var(--op-accent);
-  }
-  .action-tile.primary .at-icon { background: rgba(255,255,255,0.2); }
-  .action-tile.primary .at-meta { color: rgba(255,255,255,0.75); }
-  .at-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+  .tile-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: var(--op-accent-light);
     color: var(--op-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
   }
-  .at-name { font-weight: 600; font-size: 15px; }
-  .at-meta { font-size: 12px; color: var(--text-muted); }
+  .tile-text { display: flex; flex-direction: column; gap: 3px; }
+  .tile-name { font-weight: 600; font-size: 15px; color: var(--text); }
+  .tile-sub { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 
-  /* Layout */
-  .layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-  }
-  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
-
-  .surface {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .surface-head {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .surface-title { font-weight: 600; font-size: 15px; }
-
-  /* Pending list */
-  .pending-row {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border-light);
-    display: grid;
-    grid-template-columns: 36px 1fr auto;
-    gap: 12px;
-    align-items: center;
-  }
-  .pending-row:last-child { border-bottom: none; }
-  .pending-line { font-size: 14px; }
-  .pending-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  /* Cycle bar */
-  .cycle-bar {
-    display: flex;
-    margin: 18px 0 4px;
-    gap: 4px;
-  }
-  .cycle-step {
-    flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--surface-sunk);
-  }
-  .cycle-step.done { background: var(--op-accent); }
-  .cycle-step.now { background: linear-gradient(90deg, var(--op-accent) 50%, var(--surface-sunk) 50%); }
-  .cycle-labels {
-    display: flex;
-    gap: 4px;
+  /* Group label */
+  .group-label {
     font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--text-muted);
+    font-weight: 500;
+    margin: 24px 0 10px 4px;
   }
-  .cycle-label { flex: 1; text-align: center; }
-  .cycle-label.now { color: var(--op-accent); font-weight: 600; }
+  .group-label:first-child { margin-top: 0; }
 
-  /* Mini stats */
-  .mini-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .mini-stat {
+  /* Footer note */
+  .note {
+    margin-top: 24px;
+    padding: 14px 18px;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
   }
-  .mini-stat-num { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
-  .mini-stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .note a { color: var(--op-accent); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -150,191 +98,121 @@
   </div>
   <div class="suite-topbar-right">
     <div class="suite-network-name">Horizon Public Schools</div>
-    <div class="suite-season">Cycle 4 · Demonstration</div>
     <div class="suite-user-avatar">PC</div>
   </div>
 </header>
 
 <div class="op-page">
-  <div class="op-greeting">
-    <div>
-      <h1 class="t-display">Hey Patrick — what are you doing?</h1>
-      <p class="op-sub">8 teachers under you · cycle 4: Demonstration · 3 self-reflections waiting · 2 acknowledgements pending.</p>
-    </div>
+  <div class="crumbs">
+    <a href="../suite/home.html">Home</a> <span>›</span>
+    <span style="color: var(--text);">ObservationPoint</span>
   </div>
 
-  <!-- Action tiles -->
-  <div class="actions">
-    <a class="action-tile primary" href="observe.html">
-      <div class="at-icon">👁</div>
-      <div class="at-name">Observe</div>
-      <div class="at-meta">Walk into a classroom. Pick rubric, score, capture action step.</div>
+  <div class="op-head">
+    <h1 class="t-display">What are you doing?</h1>
+    <div class="sub">Pick a form. Saves automatically. You can change rubrics in <a href="#" style="color: var(--op-accent); text-decoration: none;">Settings</a>.</div>
+  </div>
+
+  <div class="group-label">Observation</div>
+  <div class="tiles">
+    <a class="tile" href="observe.html?mode=short">
+      <div class="tile-icon">👁</div>
+      <div class="tile-text">
+        <div class="tile-name">Short Observation</div>
+        <div class="tile-sub">5–15 min walkthrough, partial rubric</div>
+      </div>
     </a>
-    <a class="action-tile">
-      <div class="at-icon">💬</div>
-      <div class="at-name">Quick feedback</div>
-      <div class="at-meta">2-min note after a hallway conversation or peek-in.</div>
+    <a class="tile" href="observe.html">
+      <div class="tile-icon">👁</div>
+      <div class="tile-text">
+        <div class="tile-name">Observation</div>
+        <div class="tile-sub">20–45 min formal, full rubric</div>
+      </div>
     </a>
-    <a class="action-tile">
-      <div class="at-icon">⭐</div>
-      <div class="at-name">Celebrate</div>
-      <div class="at-meta">Send a recognition tied to a community commitment.</div>
-    </a>
-    <a class="action-tile">
-      <div class="at-icon">⏱</div>
-      <div class="at-name">Fundamentals timer</div>
-      <div class="at-meta">5-min on-task observation. Locked at 90% × 5 in a row.</div>
-    </a>
-    <a class="action-tile" href="pmap.html">
-      <div class="at-icon">📋</div>
-      <div class="at-name">PMAP / Eval</div>
-      <div class="at-meta">Mid-year, end-of-year, ratings, action steps.</div>
-    </a>
-    <a class="action-tile">
-      <div class="at-icon">✏️</div>
-      <div class="at-name">Write-up</div>
-      <div class="at-meta">Formal documentation. Routed for staff acknowledge.</div>
+    <a class="tile">
+      <div class="tile-icon">💬</div>
+      <div class="tile-text">
+        <div class="tile-name">Quick Feedback</div>
+        <div class="tile-sub">2-min note after a hallway peek-in</div>
+      </div>
     </a>
   </div>
 
-  <div class="layout">
-    <div>
-      <div class="surface">
-        <div class="surface-head">
-          <span class="surface-title">Waiting on you</span>
-          <span class="t-tiny">5 items</span>
-        </div>
-        <div>
-          <div class="pending-row">
-            <div class="avatar avatar-sm">ML</div>
-            <div>
-              <div class="pending-line"><strong>Maria Lopez</strong> · self-reflection ready for your response</div>
-              <div class="pending-meta">Submitted yesterday · 2 of 5 SRs ready</div>
-            </div>
-            <button class="btn btn-secondary btn-sm">Open</button>
-          </div>
-          <div class="pending-row">
-            <div class="avatar avatar-sm">JT</div>
-            <div>
-              <div class="pending-line"><strong>James Tate</strong> · acknowledgment pending on Apr 30 write-up</div>
-              <div class="pending-meta">Sent 9 days ago · auto-reminder sent today</div>
-            </div>
-            <button class="btn btn-secondary btn-sm">Open</button>
-          </div>
-          <div class="pending-row">
-            <div class="avatar avatar-sm">EP</div>
-            <div>
-              <div class="pending-line"><strong>Elena Park</strong> · 3rd action step due — no progress logged</div>
-              <div class="pending-meta">Due May 1 · last touchpoint 5 weeks ago</div>
-            </div>
-            <button class="btn btn-secondary btn-sm">Schedule</button>
-          </div>
-          <div class="pending-row">
-            <div class="avatar avatar-sm">DK</div>
-            <div>
-              <div class="pending-line"><strong>Devon King</strong> · mid-year PMAP not yet locked</div>
-              <div class="pending-meta">Final rating + SR-merge step remaining</div>
-            </div>
-            <button class="btn btn-secondary btn-sm">Open</button>
-          </div>
-          <div class="pending-row">
-            <div class="avatar avatar-sm">RC</div>
-            <div>
-              <div class="pending-line"><strong>Renee Castro</strong> · co-observation peer feedback waiting</div>
-              <div class="pending-meta">Devon submitted Apr 30 · your turn</div>
-            </div>
-            <button class="btn btn-secondary btn-sm">Open</button>
-          </div>
-        </div>
+  <div class="group-label">Recognition & relationships</div>
+  <div class="tiles">
+    <a class="tile">
+      <div class="tile-icon">⭐</div>
+      <div class="tile-text">
+        <div class="tile-name">Celebrate</div>
+        <div class="tile-sub">Recognition tied to community values</div>
       </div>
-
-      <div class="surface">
-        <div class="surface-head">
-          <span class="surface-title">Recent activity</span>
-          <a href="#" class="t-small" style="color: var(--op-accent); text-decoration: none;">All →</a>
-        </div>
-        <div style="padding: 0;">
-          <div class="pending-row" style="grid-template-columns: 1fr auto;">
-            <div>
-              <div class="pending-line">Observed <strong>Maria Lopez</strong> · 28 min · TNTP rubric</div>
-              <div class="pending-meta">April 22 · scored 4.2/5 · action step: tighten closing ritual</div>
-            </div>
-            <span class="t-tiny">2 weeks ago</span>
-          </div>
-          <div class="pending-row" style="grid-template-columns: 1fr auto;">
-            <div>
-              <div class="pending-line">Sent celebrate to <strong>Andrea Bloom</strong> · "Service" commitment</div>
-              <div class="pending-meta">"Took the lead on the parent-night setup. Steady hands."</div>
-            </div>
-            <span class="t-tiny">3 weeks ago</span>
-          </div>
-          <div class="pending-row" style="grid-template-columns: 1fr auto;">
-            <div>
-              <div class="pending-line">Mid-year PMAP for <strong>Devon King</strong></div>
-              <div class="pending-meta">3.4 / 5 average · action steps drafted</div>
-            </div>
-            <span class="t-tiny">3 weeks ago</span>
-          </div>
-        </div>
+    </a>
+    <a class="tile">
+      <div class="tile-icon">🤝</div>
+      <div class="tile-text">
+        <div class="tile-name">Meeting</div>
+        <div class="tile-sub">Log a 1:1, team meeting, or stay conversation</div>
       </div>
-    </div>
-
-    <!-- Side -->
-    <div>
-      <div class="mini-stats">
-        <div class="mini-stat">
-          <div class="mini-stat-num">14</div>
-          <div class="mini-stat-label">Obs this term</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-stat-num">4.0</div>
-          <div class="mini-stat-label">Avg score</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-stat-num">8/8</div>
-          <div class="mini-stat-label">Mid-yr done</div>
-        </div>
+    </a>
+    <a class="tile">
+      <div class="tile-icon">📥</div>
+      <div class="tile-text">
+        <div class="tile-name">Solicit Feedback</div>
+        <div class="tile-sub">Ask your team for upward feedback</div>
       </div>
+    </a>
+  </div>
 
-      <div class="surface">
-        <div class="surface-head"><span class="surface-title">Cycle 4 · Demonstration</span></div>
-        <div style="padding: 14px 18px;">
-          <div class="t-small" style="color: var(--text-secondary); margin-bottom: 4px;">December → Mardi Gras</div>
-          <div class="t-small" style="color: var(--text);">Focus: <strong>Demonstration of Learning</strong> (T5).</div>
-
-          <div class="cycle-bar">
-            <div class="cycle-step done"></div>
-            <div class="cycle-step done"></div>
-            <div class="cycle-step done"></div>
-            <div class="cycle-step now"></div>
-            <div class="cycle-step"></div>
-          </div>
-          <div class="cycle-labels">
-            <span class="cycle-label">Onboard</span>
-            <span class="cycle-label">Fundamentals</span>
-            <span class="cycle-label">Content</span>
-            <span class="cycle-label now">Demo</span>
-            <span class="cycle-label">Close</span>
-          </div>
-        </div>
+  <div class="group-label">Evaluation cycle</div>
+  <div class="tiles">
+    <a class="tile" href="evaluation.html">
+      <div class="tile-icon">📋</div>
+      <div class="tile-text">
+        <div class="tile-name">Evaluation</div>
+        <div class="tile-sub">Mid-year, end-of-year, ratings, action steps</div>
       </div>
-
-      <div class="surface">
-        <div class="surface-head"><span class="surface-title">Active rubric</span></div>
-        <div style="padding: 14px 18px;">
-          <div class="t-small" style="font-weight: 500; color: var(--text);">Horizon Teacher Rubric</div>
-          <div class="t-tiny">TNTP-derived · 5 dimensions · 5-point scale</div>
-          <div style="margin-top: 12px; padding: 10px; background: var(--surface-alt); border-radius: 6px; font-size: 12px; color: var(--text-secondary);">
-            Admins can swap or upload new rubrics in <a href="#" style="color: var(--op-accent); text-decoration: none;">Settings → Rubrics</a>.
-          </div>
-        </div>
+    </a>
+    <a class="tile" href="self-reflection.html">
+      <div class="tile-icon">🪞</div>
+      <div class="tile-text">
+        <div class="tile-name">Self-Reflection</div>
+        <div class="tile-sub">Your own reflection. Drives your eval cycle.</div>
       </div>
-    </div>
+    </a>
+    <a class="tile">
+      <div class="tile-icon">🎯</div>
+      <div class="tile-text">
+        <div class="tile-name">Goals</div>
+        <div class="tile-sub">Annual goals, owners, progress</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="group-label">Documentation</div>
+  <div class="tiles">
+    <a class="tile">
+      <div class="tile-icon">✏️</div>
+      <div class="tile-text">
+        <div class="tile-name">Write-Up</div>
+        <div class="tile-sub">Formal documentation. Routed for staff acknowledgment.</div>
+      </div>
+    </a>
+    <a class="tile">
+      <div class="tile-icon">📄</div>
+      <div class="tile-text">
+        <div class="tile-name">PIP</div>
+        <div class="tile-sub">Performance Improvement Plan</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="note">
+    Looking for who needs you today? <a href="../peoplepoint/home.html">Open PeoplePoint</a> — that's where signals and pending items live. ObservationPoint is just the tool grid.
   </div>
 
   <div class="suite-footer">
-    <span>ObservationPoint — observe, develop, document</span>
-    <span>Patrick Collins · Principal · Horizon Middle Academy</span>
+    <span>ObservationPoint · Patrick Collins · Horizon Middle Academy</span>
+    <span>Active rubric: TNTP-aligned · swap in Settings</span>
   </div>
 </div>
 

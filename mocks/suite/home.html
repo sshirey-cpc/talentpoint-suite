@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalentPoint — Home</title>
+<link rel="stylesheet" href="../shared/suite.css">
+<style>
+  body {
+    background: linear-gradient(135deg, #0f1822 0%, #1b2332 50%, #243044 100%);
+    min-height: 100svh;
+    color: white;
+  }
+  .home-shell {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+  .home-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 32px;
+  }
+  .home-brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, #14b8a6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .home-brand-name { font-weight: 600; font-size: 16px; }
+  .home-brand-tag { font-size: 11px; color: rgba(255,255,255,0.5); margin-left: auto; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .greeting { font-size: 28px; font-weight: 600; letter-spacing: -0.01em; }
+  .prompt {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+    margin-bottom: 28px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+    align-content: stretch;
+  }
+
+  .mode {
+    border-radius: 20px;
+    padding: 22px;
+    min-height: 168px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: none;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    transition: transform var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .mode:active { transform: scale(0.98); }
+  .mode::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top right, rgba(255,255,255,0.12), transparent 60%);
+    pointer-events: none;
+  }
+  .mode-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 1;
+  }
+  .mode-text { z-index: 1; }
+  .mode-name {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin-bottom: 4px;
+  }
+  .mode-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+  }
+
+  .mode.people { background: linear-gradient(135deg, #0a7c72 0%, #14b8a6 100%); }
+  .mode.work   { background: linear-gradient(135deg, #3c5a87 0%, #6b8bc4 100%); }
+  .mode.network{ background: linear-gradient(135deg, #1f4068 0%, #335c8a 100%); }
+  .mode.self   { background: linear-gradient(135deg, #475569 0%, #64748b 100%); }
+
+  .home-foot {
+    padding-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    flex-wrap: wrap;
+  }
+  .home-foot a { color: rgba(255,255,255,0.55); text-decoration: none; }
+  .home-foot a:hover { color: white; }
+  .home-foot .sep { color: rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+
+<div class="home-shell">
+  <div class="home-brand">
+    <div class="home-brand-logo">TP</div>
+    <div class="home-brand-name">TalentPoint</div>
+    <div class="home-brand-tag">Horizon Public Schools</div>
+  </div>
+
+  <div class="greeting">Good morning, Sasha.</div>
+  <div class="prompt">What are you working on?</div>
+
+  <div class="grid">
+    <a class="mode people" href="../peoplepoint/home.html">
+      <div class="mode-icon">👥</div>
+      <div class="mode-text">
+        <div class="mode-name">My People</div>
+        <div class="mode-sub">See your team, the seven data points, what needs you today</div>
+      </div>
+    </a>
+    <a class="mode work" href="../observationpoint/home.html">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-text">
+        <div class="mode-name">My Work</div>
+        <div class="mode-sub">Observe · evaluate · celebrate · log a touchpoint</div>
+      </div>
+    </a>
+    <a class="mode network" href="../peoplepoint/network.html">
+      <div class="mode-icon">🌐</div>
+      <div class="mode-text">
+        <div class="mode-name">Network</div>
+        <div class="mode-sub">Across all your schools, network-wide trends</div>
+      </div>
+    </a>
+    <a class="mode self" href="../observationpoint/staff-profile.html">
+      <div class="mode-icon">👤</div>
+      <div class="mode-text">
+        <div class="mode-name">Myself</div>
+        <div class="mode-sub">Your own profile, goals, self-reflection</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="home-foot">
+    <a href="#">Settings</a>
+    <span class="sep">·</span>
+    <a href="#">Admin · View as</a>
+    <span class="sep">·</span>
+    <a href="#">Sign out</a>
+  </div>
+</div>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PMAP — Maria Lopez · ObservationPoint</title>
+<title>Evaluation — Maria Lopez · ObservationPoint</title>
 <link rel="stylesheet" href="../shared/suite.css">
 <style>
   :root { --op-accent: #4a6fa5; --op-accent-light: #eef3fa; }
@@ -12,7 +12,7 @@
   .crumbs a { color: var(--text-secondary); text-decoration: none; }
 
   /* Header */
-  .pmap-head {
+  .eval-head {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -23,10 +23,10 @@
     gap: 18px;
     align-items: center;
   }
-  .pmap-head .avatar { width: 56px; height: 56px; font-size: 19px; }
-  .pmap-title { font-size: 11px; font-weight: 600; color: var(--op-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .pmap-name { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
-  .pmap-meta { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+  .eval-head .avatar { width: 56px; height: 56px; font-size: 19px; }
+  .eval-title { font-size: 11px; font-weight: 600; color: var(--op-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .eval-name { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .eval-meta { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
   /* Cycle progress */
   .stages {
@@ -108,7 +108,7 @@
   /* Score row */
   .scores {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     align-items: center;
     padding: 12px 18px;
     border-bottom: 1px solid var(--border-light);
@@ -187,17 +187,17 @@
 
 <div class="op-page">
   <div class="crumbs">
-    <a href="home.html">Home</a> <span>›</span>
+    <a href="home.html">ObservationPoint</a> <span>›</span>
     <a href="staff-profile.html">Maria Lopez</a> <span>›</span>
-    <span style="color: var(--text);">2025–26 PMAP</span>
+    <span style="color: var(--text);">2025–26 Evaluation</span>
   </div>
 
-  <div class="pmap-head">
+  <div class="eval-head">
     <div class="avatar">ML</div>
     <div>
-      <div class="pmap-title">Performance Management & Action Plan</div>
-      <div class="pmap-name">Maria Lopez</div>
-      <div class="pmap-meta">2025–26 cycle · Math Teacher · Horizon Middle Academy · Cycle 4 of 5</div>
+      <div class="eval-title">Evaluation cycle</div>
+      <div class="eval-name">Maria Lopez</div>
+      <div class="eval-meta">2025–26 cycle · Math Teacher · Horizon Middle Academy</div>
     </div>
     <div style="display: flex; gap: 8px;">
       <button class="btn btn-secondary">Print</button>
@@ -243,13 +243,13 @@
       <div class="final-rating">
         <div class="fr-label">Mid-year rating</div>
         <div class="fr-num">3.8 <span style="font-size: 22px; opacity: 0.5;">/ 5</span></div>
-        <div class="fr-desc">Proficient · trending up from 3.4 in October. T5 (Demonstration of Learning) is the area of focus for cycle 4.</div>
+        <div class="fr-desc">Proficient · trending up from 3.4 in October. Differentiation is the area of focus for the rest of the cycle.</div>
       </div>
 
       <!-- Score breakdown -->
       <div class="surface">
         <div class="surface-head">
-          <span class="surface-title">Score breakdown · 5 dimensions</span>
+          <span class="surface-title">Score breakdown · TNTP-aligned rubric</span>
           <span class="t-tiny">14 obs across the year</span>
         </div>
         <div class="scores head">
@@ -260,39 +260,39 @@
           <div>Apr</div>
         </div>
         <div class="scores">
-          <div><strong>T1</strong> · On Task</div>
+          <div>Essential Content</div>
+          <div class="score-num muted">3</div>
+          <div class="score-num muted">3</div>
+          <div class="score-num">3</div>
+          <div class="score-num">3</div>
+        </div>
+        <div class="scores">
+          <div>Academic Ownership</div>
+          <div class="score-num muted">3</div>
+          <div class="score-num muted">3</div>
+          <div class="score-num">4</div>
+          <div class="score-num">4</div>
+        </div>
+        <div class="scores">
+          <div>Demonstration of Learning</div>
+          <div class="score-num muted">—</div>
+          <div class="score-num muted">3</div>
+          <div class="score-num">3</div>
+          <div class="score-num">4</div>
+        </div>
+        <div class="scores">
+          <div>Culture of Learning</div>
           <div class="score-num muted">3</div>
           <div class="score-num muted">4</div>
           <div class="score-num">4</div>
           <div class="score-num">4</div>
         </div>
         <div class="scores">
-          <div><strong>T2</strong> · Community of Learners</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num">4</div>
-          <div class="score-num">4</div>
-        </div>
-        <div class="scores">
-          <div><strong>T3</strong> · Essential Content</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num">3</div>
-          <div class="score-num">3</div>
-        </div>
-        <div class="scores">
-          <div><strong>T4</strong> · Academic Ownership</div>
+          <div>Differentiation <span class="pill pill-blue" style="margin-left: 4px;">focus</span></div>
           <div class="score-num muted">—</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num">4</div>
-          <div class="score-num">4</div>
-        </div>
-        <div class="scores">
-          <div><strong>T5</strong> · Demonstration of Learning <span class="pill pill-blue" style="margin-left: 4px;">focus</span></div>
-          <div class="score-num muted">—</div>
-          <div class="score-num muted">3</div>
-          <div class="score-num">3</div>
-          <div class="score-num">4</div>
+          <div class="score-num muted">2</div>
+          <div class="score-num">2</div>
+          <div class="score-num">2</div>
         </div>
       </div>
 
@@ -305,21 +305,21 @@
         <div>
           <div class="as-card">
             <div class="as-status pending">In progress</div>
-            <div class="as-title">Tighten the closing ritual</div>
-            <div class="as-desc">Every lesson ends with one cold-call exit ticket question — 30 seconds, tells you who got it.</div>
-            <div class="as-meta">Started Apr 22 by Patrick Collins · cycle 4 demonstration focus</div>
+            <div class="as-title">Differentiated opener</div>
+            <div class="as-desc">Two problem options for the opener. Students self-select. Track who picks which.</div>
+            <div class="as-meta">Started Apr 22 by Patrick Collins · differentiation focus</div>
           </div>
           <div class="as-card">
             <div class="as-status pending">In progress</div>
-            <div class="as-title">Differentiation in opening problem</div>
-            <div class="as-desc">Two problem options for the opener. Students self-select. Track who picks which.</div>
-            <div class="as-meta">Started Feb 8 from co-observation with Devon</div>
+            <div class="as-title">Exit ticket protocol</div>
+            <div class="as-desc">Every lesson ends with one cold-call exit ticket question — 30 seconds, tells you who got it.</div>
+            <div class="as-meta">Started Feb 8 · demonstration-of-learning focus</div>
           </div>
           <div class="as-card">
             <div class="as-status">Completed</div>
             <div class="as-title">Cold-call deck</div>
             <div class="as-desc">Build a roster card deck. Pull names randomly. No more volunteer-only.</div>
-            <div class="as-meta">Completed Feb 1 · pulled forward into closing ritual step</div>
+            <div class="as-meta">Completed Feb 1</div>
           </div>
         </div>
       </div>
@@ -331,7 +331,7 @@
         <div class="surface-head"><span class="surface-title">Self-reflection</span></div>
         <div style="padding: 16px 18px;">
           <div class="t-small" style="color: var(--text-secondary); margin-bottom: 10px;">Maria submitted yesterday. Your response is what unlocks the cycle close.</div>
-          <button class="btn btn-primary" style="background: var(--op-accent); border-color: var(--op-accent); width: 100%;">Open self-reflection →</button>
+          <a href="self-reflection.html" class="btn btn-primary" style="background: var(--op-accent); border-color: var(--op-accent); width: 100%; justify-content: center;">Open self-reflection →</a>
         </div>
       </div>
 
@@ -339,12 +339,12 @@
         <div class="surface-head"><span class="surface-title">Year goals</span></div>
         <div style="padding: 14px 18px; font-size: 13px; line-height: 1.7; color: var(--text-secondary);">
           <div style="padding: 8px 0; border-bottom: 1px solid var(--border-light);">
-            <div style="color: var(--text); font-weight: 500;">SAT-9 math 3+ growth: 70% of class</div>
+            <div style="color: var(--text); font-weight: 500;">Math 3+ growth: 70% of class</div>
             <div class="t-tiny">Tracked monthly · current 62%</div>
           </div>
           <div style="padding: 8px 0; border-bottom: 1px solid var(--border-light);">
             <div style="color: var(--text); font-weight: 500;">Ratchet exit-ticket protocol</div>
-            <div class="t-tiny">Owner: Maria · linked to T5 action step</div>
+            <div class="t-tiny">Owner: Maria · linked to action step</div>
           </div>
           <div style="padding: 8px 0;">
             <div style="color: var(--text); font-weight: 500;">Lead one learning walk</div>
@@ -356,8 +356,7 @@
       <div class="surface">
         <div class="surface-head"><span class="surface-title">Outside this cycle</span></div>
         <div style="padding: 14px 18px; font-size: 13px; line-height: 1.7; color: var(--text-secondary);">
-          <div>· 1 PIP-eligible flag (resolved Mar 14)</div>
-          <div>· 0 write-ups</div>
+          <div>· 0 PIPs · 0 write-ups</div>
           <div>· 4 celebrate sends</div>
           <div>· 0 solicit requests outstanding</div>
         </div>
@@ -366,7 +365,7 @@
   </div>
 
   <div class="suite-footer">
-    <span>ObservationPoint · PMAP for Maria Lopez · 2025–26</span>
+    <span>ObservationPoint · Evaluation for Maria Lopez · 2025–26</span>
     <span>Locked stages stay immutable · self-reflection drives close</span>
   </div>
 </div>

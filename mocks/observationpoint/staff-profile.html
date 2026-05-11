@@ -3,43 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maria Lopez · Staff profile — ObservationPoint</title>
+<title>Maria Lopez · Work history — ObservationPoint</title>
 <link rel="stylesheet" href="../shared/suite.css">
 <style>
   :root { --op-accent: #4a6fa5; --op-accent-light: #eef3fa; }
-  .op-page { max-width: 1180px; margin: 0 auto; padding: 24px; }
+  .op-page { max-width: 1080px; margin: 0 auto; padding: 24px; }
   .crumbs { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
   .crumbs a { color: var(--text-secondary); text-decoration: none; }
 
+  /* Slim header */
   .profile-head {
-    background: linear-gradient(135deg, #1b2332 0%, #2a3a52 100%);
-    color: white;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    margin-bottom: 18px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 20px;
+    gap: 18px;
     align-items: center;
   }
-  .profile-head .avatar {
-    width: 64px;
-    height: 64px;
-    font-size: 22px;
-    background: linear-gradient(135deg, #4a6fa5 0%, #6b8bc4 100%);
-  }
-  .profile-name { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
-  .profile-meta { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
-  .profile-pills { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-  .profile-pill {
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.92);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 3px 9px;
-    border-radius: 14px;
-    font-size: 11px;
+  .profile-head .avatar { width: 52px; height: 52px; font-size: 18px; }
+  .profile-name { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .profile-meta { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+  .profile-pp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--accent-light);
+    border: 1px solid #b3e6df;
+    color: var(--accent-strong);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 13px;
     font-weight: 500;
+    transition: all var(--transition);
   }
+  .profile-pp-link:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
   /* Tabs */
   .ptabs {
@@ -58,6 +59,7 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
+    font-family: inherit;
   }
   .ptab.active { color: var(--op-accent); border-bottom-color: var(--op-accent); }
 
@@ -146,10 +148,21 @@
   .tl-icon.celebrate { background: #fff4e6; color: #d97706; }
   .tl-icon.feedback { background: #e0f2fe; color: #0284c7; }
   .tl-icon.eval { background: var(--op-accent-light); color: var(--op-accent); }
-  .tl-icon.flag { background: #fee2e2; color: #b91c1c; }
   .tl-line { font-size: 14px; }
   .tl-line strong { font-weight: 600; }
   .tl-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Cycle status */
+  .cycle-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+  .cycle-row:last-child { border-bottom: none; }
+  .cycle-stage { color: var(--text); font-weight: 500; }
+  .cycle-when { color: var(--text-muted); font-size: 12px; }
 </style>
 </head>
 <body>
@@ -172,35 +185,27 @@
 
 <div class="op-page">
   <div class="crumbs">
-    <a href="home.html">Home</a> <span>›</span>
-    <span style="color: var(--text);">Maria Lopez</span>
+    <a href="home.html">ObservationPoint</a> <span>›</span>
+    <span style="color: var(--text);">Maria Lopez · work history</span>
   </div>
 
   <div class="profile-head">
     <div class="avatar">ML</div>
     <div>
       <div class="profile-name">Maria Lopez</div>
-      <div class="profile-meta">Math Teacher · Grade 7 · Horizon Middle Academy · Hired Aug 12, 2024</div>
-      <div class="profile-pills">
-        <span class="profile-pill">TNTP rubric</span>
-        <span class="profile-pill">1.7 yrs tenured</span>
-        <span class="profile-pill">Patrick Collins, supervisor</span>
-        <span class="profile-pill">14 obs · 4.0 avg</span>
-      </div>
+      <div class="profile-meta">Math · Grade 7 · Horizon Middle Academy · 14 obs · 4.0 avg</div>
     </div>
-    <div style="display: flex; gap: 8px;">
-      <a href="observe.html" class="btn btn-primary" style="background: var(--accent); border-color: var(--accent);">Observe now</a>
-      <button class="btn btn-secondary" style="background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); color: white;">More ↓</button>
-    </div>
+    <a href="../peoplepoint/person.html" class="profile-pp-link">
+      <span>👤</span>
+      <span>Open full profile in PeoplePoint →</span>
+    </a>
   </div>
 
   <div class="ptabs">
     <button class="ptab active">Activity</button>
-    <button class="ptab">PMAP</button>
+    <button class="ptab">Evaluation</button>
     <button class="ptab">Action steps (3)</button>
-    <button class="ptab">Goals</button>
-    <button class="ptab">Self-reflection</button>
-    <button class="ptab">Documents</button>
+    <button class="ptab">Self-Reflection</button>
   </div>
 
   <div class="grid">
@@ -209,7 +214,7 @@
       <div class="surface">
         <div class="surface-head">
           <span class="surface-title">Rubric trend across the year</span>
-          <span class="t-tiny">14 observations</span>
+          <span class="t-tiny">14 observations · TNTP rubric</span>
         </div>
         <div class="chart">
           <div class="chart-bars">
@@ -236,7 +241,7 @@
             <div class="tl-when">May 8</div>
             <div class="tl-icon eval">📋</div>
             <div>
-              <div class="tl-line"><strong>Self-reflection</strong> submitted by Maria</div>
+              <div class="tl-line"><strong>Self-Reflection</strong> submitted by Maria</div>
               <div class="tl-meta">Awaiting your response · drives mid-year close</div>
             </div>
           </div>
@@ -245,7 +250,7 @@
             <div class="tl-icon">👁</div>
             <div>
               <div class="tl-line"><strong>Observation</strong> by Patrick Collins · 28 min</div>
-              <div class="tl-meta">Score 4.2 · action step: tighten closing ritual</div>
+              <div class="tl-meta">Score 4.2 · action step: differentiated opener</div>
             </div>
           </div>
           <div class="timeline-row">
@@ -253,22 +258,22 @@
             <div class="tl-icon celebrate">⭐</div>
             <div>
               <div class="tl-line"><strong>Celebrate</strong> sent by Patrick Collins</div>
-              <div class="tl-meta">"Service" commitment · "Stayed late to coach the math team."</div>
+              <div class="tl-meta">"Stayed late to coach the math team."</div>
             </div>
           </div>
           <div class="timeline-row">
             <div class="tl-when">Mar 14</div>
-            <div class="tl-icon">💬</div>
+            <div class="tl-icon">🤝</div>
             <div>
-              <div class="tl-line"><strong>Stay conversation</strong> · Patrick Collins</div>
-              <div class="tl-meta">After parent meeting concern. Outcome: thoughtful, plans to stay.</div>
+              <div class="tl-line"><strong>Meeting</strong> · Patrick Collins</div>
+              <div class="tl-meta">Stay conversation. Outcome: thoughtful, plans to stay.</div>
             </div>
           </div>
           <div class="timeline-row">
             <div class="tl-when">Feb 8</div>
             <div class="tl-icon feedback">💬</div>
             <div>
-              <div class="tl-line"><strong>Quick feedback</strong> · co-obs with Devon King</div>
+              <div class="tl-line"><strong>Quick Feedback</strong> · co-obs with Devon King</div>
               <div class="tl-meta">Mutual rubric. Both flagged differentiation as a focus.</div>
             </div>
           </div>
@@ -276,7 +281,7 @@
             <div class="tl-when">Jan 30</div>
             <div class="tl-icon eval">📋</div>
             <div>
-              <div class="tl-line"><strong>Mid-year PMAP</strong> · Patrick Collins</div>
+              <div class="tl-line"><strong>Mid-year Evaluation</strong> · Patrick Collins</div>
               <div class="tl-meta">3.8/5 average · ready for self-reflection</div>
             </div>
           </div>
@@ -284,58 +289,60 @@
       </div>
     </div>
 
-    <!-- Side -->
+    <!-- Side: work-only context -->
     <div>
       <div class="surface">
-        <div class="surface-head"><span class="surface-title">Quick stats</span></div>
-        <div style="padding: 14px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div>
-            <div class="t-tiny" style="text-transform: uppercase; letter-spacing: 0.04em;">Observations</div>
-            <div style="font-size: 22px; font-weight: 600;">14</div>
+        <div class="surface-head"><span class="surface-title">Evaluation cycle · 2025–26</span></div>
+        <div>
+          <div class="cycle-row">
+            <span class="cycle-stage">Goals locked</span>
+            <span class="cycle-when">Sep 18 ✓</span>
           </div>
-          <div>
-            <div class="t-tiny" style="text-transform: uppercase; letter-spacing: 0.04em;">Avg score</div>
-            <div style="font-size: 22px; font-weight: 600;">4.0</div>
+          <div class="cycle-row">
+            <span class="cycle-stage">First observation</span>
+            <span class="cycle-when">Oct 22 ✓</span>
           </div>
-          <div>
-            <div class="t-tiny" style="text-transform: uppercase; letter-spacing: 0.04em;">Touchpoints</div>
-            <div style="font-size: 22px; font-weight: 600;">22</div>
+          <div class="cycle-row">
+            <span class="cycle-stage">Mid-year evaluation</span>
+            <span class="cycle-when">Jan 30 ✓</span>
           </div>
-          <div>
-            <div class="t-tiny" style="text-transform: uppercase; letter-spacing: 0.04em;">Last 30d</div>
-            <div style="font-size: 22px; font-weight: 600;">2</div>
+          <div class="cycle-row">
+            <span class="cycle-stage" style="color: var(--op-accent);">Self-reflection</span>
+            <span class="cycle-when" style="color: var(--op-accent);">Submitted May 8</span>
           </div>
+          <div class="cycle-row">
+            <span class="cycle-stage">End of year</span>
+            <span class="cycle-when">Due Jun 14</span>
+          </div>
+        </div>
+        <div style="padding: 12px 18px; border-top: 1px solid var(--border-light);">
+          <a href="evaluation.html" class="btn btn-primary btn-sm" style="background: var(--op-accent); border-color: var(--op-accent); width: 100%; justify-content: center;">Open Evaluation</a>
         </div>
       </div>
 
       <div class="surface">
-        <div class="surface-head"><span class="surface-title">2025–26 goals</span></div>
-        <div style="padding: 14px 18px; line-height: 1.7;">
-          <div class="t-small" style="color: var(--text); font-weight: 500;">Math 3+ growth: 70% of class</div>
-          <div class="t-tiny" style="margin-bottom: 12px;">62% currently · trended monthly</div>
-          <div class="t-small" style="color: var(--text); font-weight: 500;">Ratchet exit-ticket protocol</div>
-          <div class="t-tiny" style="margin-bottom: 12px;">Active · linked to T5 action step</div>
-          <div class="t-small" style="color: var(--text); font-weight: 500;">Lead one learning walk</div>
-          <div class="t-tiny">Pending mentor pairing</div>
-        </div>
-      </div>
-
-      <div class="surface">
-        <div class="surface-head"><span class="surface-title">From PeoplePoint</span></div>
-        <div style="padding: 14px 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
-          <div>Status: <strong style="color: var(--text);">Filled</strong></div>
-          <div>ITR 2026: <strong style="color: var(--amber);">Not responded</strong></div>
-          <div>PTO balance: <strong style="color: var(--text);">7.5 days</strong></div>
-          <div>Birthday: <strong style="color: var(--text);">Today 🎂</strong></div>
-          <a href="../peoplepoint/person.html" class="t-small" style="display: inline-block; margin-top: 10px; color: var(--accent); text-decoration: none;">Open in PeoplePoint →</a>
+        <div class="surface-head"><span class="surface-title">Active action steps</span></div>
+        <div style="padding: 14px 18px; line-height: 1.5;">
+          <div style="margin-bottom: 12px;">
+            <div class="t-small" style="font-weight: 500; color: var(--text);">Differentiated opener</div>
+            <div class="t-tiny">Started Apr 22 · differentiation focus</div>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <div class="t-small" style="font-weight: 500; color: var(--text);">Exit ticket protocol</div>
+            <div class="t-tiny">Started Feb 8 · demonstration-of-learning focus</div>
+          </div>
+          <div>
+            <div class="t-small" style="font-weight: 500; color: var(--text);">Cold-call deck</div>
+            <div class="t-tiny" style="color: var(--green);">Completed Feb 1</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="suite-footer">
-    <span>ObservationPoint · staff profile</span>
-    <span>14 obs · 22 touchpoints · linked across the suite</span>
+    <span>ObservationPoint · Maria's work history</span>
+    <span>For tenure, ITR, birthday, PTO — <a href="../peoplepoint/person.html" style="color: var(--accent);">see full profile in PeoplePoint</a></span>
   </div>
 </div>
 

@@ -11,11 +11,30 @@
   .crumbs { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
   .crumbs a { color: var(--text-secondary); text-decoration: none; }
 
-  .form-head { margin-bottom: 22px; }
+  .form-head { margin-bottom: 22px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
   .form-head h1 { letter-spacing: -0.01em; }
-  .form-meta { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
+  .form-meta { color: var(--text-secondary); font-size: 14px; margin-top: 6px; width: 100%; }
 
-  /* Person picker bar */
+  .mode-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 14px;
+    background: var(--op-accent-light);
+    color: var(--op-accent);
+    border: 1px solid #d2dfee;
+  }
+  .mode-pill .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--op-accent);
+  }
+
+  /* Person picker */
   .picker {
     display: flex;
     align-items: center;
@@ -30,34 +49,20 @@
   .picker-name { font-weight: 600; font-size: 15px; }
   .picker-meta { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
 
-  .timer {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--op-accent-light) 0%, #f6f9fc 100%);
-    border: 1px solid #d2dfee;
-    border-radius: var(--radius-lg);
+  /* Rubric note */
+  .rubric-note {
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
     margin-bottom: 16px;
-  }
-  .timer-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--op-accent);
-    color: white;
+    font-size: 13px;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 18px;
+    gap: 10px;
   }
-  .timer-now {
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    font-family: ui-monospace, monospace;
-  }
-  .timer-label { font-size: 12px; color: var(--text-secondary); }
+  .rubric-note a { color: var(--op-accent); text-decoration: none; }
 
   .surface {
     background: var(--surface);
@@ -77,31 +82,32 @@
 
   /* Rubric dimension */
   .dim {
-    padding: 18px;
+    padding: 20px;
     border-bottom: 1px solid var(--border-light);
   }
   .dim:last-child { border-bottom: none; }
-  .dim-head {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .dim-code {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--op-accent);
-    letter-spacing: 0.05em;
-  }
   .dim-name {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
+    margin-bottom: 6px;
   }
   .dim-q {
     font-size: 13px;
     color: var(--text-secondary);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     line-height: 1.5;
+  }
+  .dim.optional .dim-name::after {
+    content: 'OPTIONAL';
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-left: 8px;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    background: var(--surface-alt);
+    border-radius: 10px;
+    vertical-align: middle;
   }
 
   .scale-row {
@@ -121,6 +127,7 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    font-family: inherit;
   }
   .scale-btn:hover { border-color: var(--op-accent); background: var(--op-accent-light); }
   .scale-btn.selected {
@@ -142,6 +149,7 @@
     resize: vertical;
     min-height: 60px;
   }
+  .dim-note:focus { outline: none; border-color: var(--op-accent); background: white; }
 
   /* Action step */
   .action-step {
@@ -183,7 +191,6 @@
     position: sticky;
     bottom: 16px;
   }
-  .footer-actions-left { font-size: 13px; color: var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -206,13 +213,14 @@
 
 <div class="op-page">
   <div class="crumbs">
-    <a href="home.html">Home</a> <span>›</span>
-    <span style="color: var(--text);">Observe</span>
+    <a href="home.html">ObservationPoint</a> <span>›</span>
+    <span style="color: var(--text);">Observation</span>
   </div>
 
   <div class="form-head">
     <h1 class="t-h1">Observation</h1>
-    <div class="form-meta">Score, capture an action step, send. Saves automatically.</div>
+    <span class="mode-pill"><span class="dot"></span>Full · 20–45 min</span>
+    <div class="form-meta">Score five dimensions, capture an action step, send. Saves automatically.</div>
   </div>
 
   <!-- Person picker -->
@@ -220,23 +228,15 @@
     <div class="avatar">ML</div>
     <div style="flex: 1;">
       <div class="picker-name">Maria Lopez</div>
-      <div class="picker-meta">Math · Grade 7 · Horizon Middle Academy</div>
-    </div>
-    <div style="display: flex; gap: 6px; flex-direction: column; align-items: flex-end;">
-      <span class="pill pill-purple" style="font-size: 11px;">TNTP rubric</span>
-      <span class="t-tiny">Last obs: April 22</span>
+      <div class="picker-meta">Math · Grade 7 · Horizon Middle Academy · Last observation: April 22</div>
     </div>
     <button class="btn btn-ghost btn-sm">Change</button>
   </div>
 
-  <!-- Timer -->
-  <div class="timer">
-    <div class="timer-icon">⏱</div>
-    <div style="flex: 1;">
-      <div class="timer-now">12:34</div>
-      <div class="timer-label">Logging — May 9, 9:14 AM</div>
-    </div>
-    <button class="btn btn-secondary btn-sm">Pause</button>
+  <!-- Rubric context -->
+  <div class="rubric-note">
+    <span>📐</span>
+    <span style="flex: 1;">Using the <strong style="color: var(--text);">TNTP-aligned 5-dimension rubric</strong>. Your network admin can swap in your own rubric in <a href="#">Settings → Rubrics</a>.</span>
   </div>
 
   <!-- Rubric -->
@@ -247,44 +247,10 @@
     </div>
 
     <div class="dim">
-      <div class="dim-head">
-        <span class="dim-code">T1</span>
-        <span class="dim-name">On Task</span>
-      </div>
-      <div class="dim-q">Are all students engaged in the work of the lesson from start to finish?</div>
-      <div class="scale-row">
-        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs imp.</span></button>
-        <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
-        <button class="scale-btn"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
-        <button class="scale-btn selected"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
-        <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
-      </div>
-      <textarea class="dim-note" placeholder="Optional note...">All but one student visibly engaged through the whole 28 minutes. Two who started slow self-corrected after the partner check.</textarea>
-    </div>
-
-    <div class="dim">
-      <div class="dim-head">
-        <span class="dim-code">T2</span>
-        <span class="dim-name">Community of Learners</span>
-      </div>
-      <div class="dim-q">Are all students active members of a joyful and supportive classroom community?</div>
-      <div class="scale-row">
-        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs imp.</span></button>
-        <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
-        <button class="scale-btn"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
-        <button class="scale-btn selected"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
-        <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
-      </div>
-    </div>
-
-    <div class="dim">
-      <div class="dim-head">
-        <span class="dim-code">T3</span>
-        <span class="dim-name">Essential Content</span>
-      </div>
+      <div class="dim-name">Essential Content</div>
       <div class="dim-q">Are students working on grade-appropriate, lesson-aligned content?</div>
       <div class="scale-row">
-        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs imp.</span></button>
+        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs work</span></button>
         <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
         <button class="scale-btn selected"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
         <button class="scale-btn"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
@@ -294,43 +260,74 @@
     </div>
 
     <div class="dim">
-      <div class="dim-head">
-        <span class="dim-code">T5</span>
-        <span class="dim-name">Demonstration of Learning</span>
-        <span class="pill pill-blue" style="margin-left: auto;">Cycle focus</span>
-      </div>
-      <div class="dim-q">Are students demonstrating they have learned the content taught today?</div>
+      <div class="dim-name">Academic Ownership</div>
+      <div class="dim-q">Are students doing the majority of the thinking and talking?</div>
       <div class="scale-row">
-        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs imp.</span></button>
+        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs work</span></button>
         <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
         <button class="scale-btn"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
         <button class="scale-btn selected"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
         <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
       </div>
+      <textarea class="dim-note" placeholder="Optional note...">Strong student talk in the partner check. About 60% of voices in the room were students by the second 10 minutes.</textarea>
+    </div>
+
+    <div class="dim">
+      <div class="dim-name">Demonstration of Learning</div>
+      <div class="dim-q">Are students showing they've learned the content today?</div>
+      <div class="scale-row">
+        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs work</span></button>
+        <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
+        <button class="scale-btn selected"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
+        <button class="scale-btn"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
+        <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
+      </div>
+      <textarea class="dim-note" placeholder="Optional note...">Exit ticket would have been the missing piece — 28 minutes in, I can see who's engaged but can't yet see who got it.</textarea>
+    </div>
+
+    <div class="dim">
+      <div class="dim-name">Culture of Learning</div>
+      <div class="dim-q">Are students engaged and respectful, with a strong learning environment?</div>
+      <div class="scale-row">
+        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs work</span></button>
+        <button class="scale-btn"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
+        <button class="scale-btn"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
+        <button class="scale-btn selected"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
+        <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
+      </div>
+      <textarea class="dim-note" placeholder="Optional note..."></textarea>
+    </div>
+
+    <div class="dim">
+      <div class="dim-name">Differentiation</div>
+      <div class="dim-q">Are students at different levels getting what they need?</div>
+      <div class="scale-row">
+        <button class="scale-btn"><span class="scale-num">1</span><span class="scale-label">Needs work</span></button>
+        <button class="scale-btn selected"><span class="scale-num">2</span><span class="scale-label">Emerging</span></button>
+        <button class="scale-btn"><span class="scale-num">3</span><span class="scale-label">Developing</span></button>
+        <button class="scale-btn"><span class="scale-num">4</span><span class="scale-label">Proficient</span></button>
+        <button class="scale-btn"><span class="scale-num">5</span><span class="scale-label">Exemplary</span></button>
+      </div>
+      <textarea class="dim-note" placeholder="Optional note...">Two clear groups didn't get differentiated entry — saw a couple of students freeze on the opening problem.</textarea>
     </div>
   </div>
 
   <!-- Action step -->
   <div class="surface">
     <div class="surface-head">
-      <span class="surface-title">Action step (optional)</span>
-      <span class="t-tiny">Coaching from the Get Better Faster guide</span>
+      <span class="surface-title">Action step <span style="color: var(--text-muted); font-weight: 400;">(optional)</span></span>
     </div>
     <div style="padding: 18px;">
-      <div class="t-small" style="margin-bottom: 8px; color: var(--text);">Suggested for cycle 4 · Demonstration of Learning</div>
       <div class="action-step">
         <div class="action-step-label">This week — practice this with Maria</div>
-        <div style="font-size: 13px; color: #7c2d12; margin-bottom: 10px; line-height: 1.5;">
-          Tighten the closing ritual: every lesson ends with one cold-call exit ticket question that's worth 30 seconds and tells you who got it.
-        </div>
-        <textarea placeholder="Customize for Maria...">Try the cold-call exit ticket on Monday's quadratics lesson. Pick 4 names from the deck before class — don't take volunteers. Send a 1-line voice note Tuesday with how it went.</textarea>
+        <textarea placeholder="One concrete, doable practice for this week...">Try a differentiated opener on Monday. Two problem options, students self-select. Send a 1-line voice note Tuesday with how it went and who picked which.</textarea>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
   <div class="footer-actions">
-    <div class="footer-actions-left">Auto-saved · 3 of 5 dimensions scored</div>
+    <div style="font-size: 13px; color: var(--text-secondary);">Auto-saved · 5 of 5 dimensions scored</div>
     <div style="display: flex; gap: 8px;">
       <button class="btn btn-ghost">Save draft</button>
       <button class="btn btn-secondary">Save + Next</button>
@@ -339,8 +336,8 @@
   </div>
 
   <div class="suite-footer">
-    <span>ObservationPoint · Observe form</span>
-    <span>Score saves to BigQuery · linked to Maria's StaffProfile</span>
+    <span>ObservationPoint · Observation</span>
+    <span>Score saves to BigQuery · linked to Maria's profile</span>
   </div>
 </div>
 
